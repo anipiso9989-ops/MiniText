@@ -1,6 +1,6 @@
 import type { Diagnostic, Limits, Options, Result } from './model/types.ts';
 
-export const defaultLimits: Limits = Object.freeze({
+export const defaultLimits: Limits = /* @__PURE__ */ Object.freeze({
   maxInputBytes: 1_000_000, maxNodes: 100_000, maxDepth: 64,
   maxOutputBytes: 4_000_000, maxWork: 8_000_000,
 });

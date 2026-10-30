@@ -6,6 +6,7 @@ import { emitHTML } from './backends/html.ts';
 
 export type * from './model/types.ts';
 export { defaultLimits } from './limits.ts';
+export { InputError } from './limits.ts';
 export { validateDocument } from './model/validate.ts';
 
 function extensionsFor(options: Options): readonly Extension[] {

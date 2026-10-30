@@ -30,6 +30,23 @@ test('images make no external requests by default', () => {
   const result = render('![description](https://example.com/img)'); assert.ok(result.ok);
   assert.equal(result.artifact.html, '<p>description</p>\n');
 });
+test('unmatched angle-bracket lookahead consumes the work budget', () => {
+  const result = render('<'.repeat(20_000), { limits: { maxWork: 100_000 } });
+  assert.ok(!result.ok); assert.equal(result.diagnostics[0]?.code, 'MAX_WORK');
+});
+test('large whitespace runs do not invoke unbounded backtracking', () => {
+  const result = render('# a' + ' '.repeat(30_000) + 'x\n\na' + ' '.repeat(30_000) + 'x\nend');
+  assert.ok(result.ok); assert.ok(result.artifact.html.endsWith('end</p>\n'));
+});
+test('URLs normalize Unicode and spaces without double encoding escapes', () => {
+  const document: Document = { type: 'document', children: [{ type: 'paragraph', children: [
+    { type: 'link', url: '/a b/é%20c', children: [{ type: 'text', value: 'x' }] },
+    { type: 'link', url: '/\ud800', children: [{ type: 'text', value: 'y' }] },
+  ] }] };
+  const result = render(document); assert.ok(result.ok);
+  assert.ok(result.artifact.html.includes('href="/a%20b/%C3%A9%20c"'));
+  assert.ok(result.artifact.html.includes('href="/%EF%BF%BD"'));
+});
 test('extension output shares the HTML and URL policy', () => {
   const doc: Document = { type: 'document', children: [{ type: 'extension', kind: 'block', name: 'test', data: null, fallback: '', children: [] }] };
   const result = render(doc, { extensions: [{ name: 'test', render: () => ({ tag: 'a', attrs: { href: 'javascript:x' }, children: ['<script>x</script>'] }) }] });

@@ -1,0 +1,137 @@
+{
+  "environment": {
+    "date": "2026-10-30T22:01:55.542Z",
+    "node": "v24.22.1",
+    "v8": "13.6.233.17-node.58",
+    "os": "linux 6.18.57 x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCPUs": 9,
+    "sourceSHA256": "4c08c695536ee7dbbbf89539406f27ad0c4f78e8219ec7c1b6621e018ebf0256",
+    "versions": {
+      "@types/node": "24.10.1",
+      "esbuild": "0.28.2",
+      "happy-dom": "21.0.4",
+      "markdown-it": "14.3.3",
+      "marked": "18.1.2",
+      "micromark": "4.0.2",
+      "playwright": "1.62.1",
+      "typescript": "5.9.3"
+    }
+  },
+  "methodology": "esbuild browser/ES2022 ESM bundles, minify+tree-shake, gzip level 9, Brotli default. Feature-alone rows exclude the core; compression sizes are not additive. Other libraries implement broader Markdown grammars.",
+  "rows": [
+    {
+      "name": "MiniText render",
+      "minifiedBytes": 19459,
+      "gzipBytes": 7565,
+      "brotliBytes": 6898,
+      "modules": 8
+    },
+    {
+      "name": "MiniText parse",
+      "minifiedBytes": 14280,
+      "gzipBytes": 5873,
+      "brotliBytes": 5348,
+      "modules": 8
+    },
+    {
+      "name": "MiniText root (all exports)",
+      "minifiedBytes": 19861,
+      "gzipBytes": 7717,
+      "brotliBytes": 7029,
+      "modules": 8
+    },
+    {
+      "name": "MiniText browser",
+      "minifiedBytes": 20429,
+      "gzipBytes": 7980,
+      "brotliBytes": 7265,
+      "modules": 9
+    },
+    {
+      "name": "MiniText tables (feature alone)",
+      "minifiedBytes": 2355,
+      "gzipBytes": 1128,
+      "brotliBytes": 1011,
+      "modules": 3
+    },
+    {
+      "name": "MiniText strikethrough (feature alone)",
+      "minifiedBytes": 950,
+      "gzipBytes": 578,
+      "brotliBytes": 493,
+      "modules": 3
+    },
+    {
+      "name": "MiniText task lists (feature alone)",
+      "minifiedBytes": 850,
+      "gzipBytes": 553,
+      "brotliBytes": 461,
+      "modules": 3
+    },
+    {
+      "name": "MiniText rich text (feature alone)",
+      "minifiedBytes": 7756,
+      "gzipBytes": 3075,
+      "brotliBytes": 2766,
+      "modules": 6
+    },
+    {
+      "name": "MiniText embeds (feature alone)",
+      "minifiedBytes": 5917,
+      "gzipBytes": 2462,
+      "brotliBytes": 2205,
+      "modules": 4
+    },
+    {
+      "name": "marked",
+      "minifiedBytes": 47745,
+      "gzipBytes": 14305,
+      "brotliBytes": 13083,
+      "modules": 2
+    },
+    {
+      "name": "markdown-it",
+      "minifiedBytes": 149703,
+      "gzipBytes": 53196,
+      "brotliBytes": 44496,
+      "modules": 77
+    },
+    {
+      "name": "micromark",
+      "minifiedBytes": 53795,
+      "gzipBytes": 15742,
+      "brotliBytes": 14018,
+      "modules": 55
+    }
+  ],
+  "lazyChunks": [
+    {
+      "file": "benchmarks/.tmp/lazy/stdin.js",
+      "bytes": 18137,
+      "inputs": [
+        "dist/security.js",
+        "dist/parse/inline.js",
+        "dist/parse/block.js",
+        "dist/model/validate.js",
+        "dist/backends/html.js",
+        "dist/index.js",
+        "<stdin>"
+      ]
+    },
+    {
+      "file": "benchmarks/.tmp/lazy/tables-5YREETVM.js",
+      "bytes": 2301,
+      "inputs": [
+        "dist/features/tables.js"
+      ]
+    },
+    {
+      "file": "benchmarks/.tmp/lazy/chunk-3H4TIWUA.js",
+      "bytes": 1477,
+      "inputs": [
+        "dist/limits.js"
+      ]
+    }
+  ]
+}

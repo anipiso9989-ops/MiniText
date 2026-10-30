@@ -2,8 +2,9 @@
   "name": "@mini/text",
   "version": "0.1.0",
   "description": "A small, bounded Markdown and structured document engine",
+  "license": "MIT",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": ["./dist/styles.css"],
   "files": ["dist", "README.md", "LICENSE", "docs"],
   "exports": {
     ".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"},
@@ -13,19 +14,22 @@
     "./strikethrough": {"types": "./dist/features/strikethrough.d.ts", "import": "./dist/features/strikethrough.js"},
     "./task-lists": {"types": "./dist/features/task-lists.d.ts", "import": "./dist/features/task-lists.js"},
     "./embeds": {"types": "./dist/features/embeds.d.ts", "import": "./dist/features/embeds.js"},
-    "./integration": {"types": "./dist/integration.d.ts", "import": "./dist/integration.js"}
+    "./integration": {"types": "./dist/integration.d.ts", "import": "./dist/integration.js"},
+    "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test tests/*.test.ts",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-include=src/**/*.ts --test tests/*.test.ts",
+    "test:browser": "node scripts/browser-test.mjs",
     "bench": "node benchmarks/run.mjs",
+    "conformance": "node benchmarks/conformance.mjs",
     "size": "node benchmarks/size.mjs",
     "check": "npm run typecheck && npm test && npm run build && node scripts/check-package.mjs",
     "prepack": "npm run build"
   },
-  "engines": {"node": ">=20"},
+  "engines": {"node": ">=22.18"},
   "devDependencies": {
     "@types/node": "24.10.1",
     "esbuild": "0.28.2",
@@ -33,6 +37,7 @@
     "markdown-it": "14.3.3",
     "marked": "18.1.2",
     "micromark": "4.0.2",
+    "playwright": "1.62.1",
     "typescript": "5.9.3"
   },
   "repository": {"type": "git", "url": "https://github.com/anipiso9989-ops/MiniText.git"}

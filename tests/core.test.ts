@@ -17,6 +17,7 @@ const cases = [
   'a\n===', 'a\n---', 'first\nsecond\n---', '---', '* * *', '___', 'a\n\n---',
   '**strong**', '*em*', '_em_', '__strong__', '***both***', 'a_b_c', 'a*b*c', '*a **b** c*', '**a *b* c**',
   '*a* and *b*', '**a**b**c**', 'a***b***c', '*a\n b*', '\\*literal\\*', '&amp; &lt; &gt; &quot; &#65; &#x41;',
+  'a😀_b_ c', '😀*a*😀', 'a🙶_b_ c',
   '`code`', '``a ` b``', '` a `', '`  `', '`a\nb`', '`unclosed', 'a  \nb', 'a\\\nb',
   '```ts\nx < y\n```', '~~~\nx\n~~~~', '```\n\n```', '```\nx\n', '```\nx', '```\nx\n\n', '   ```\n   a\n ```',
   '    code\n    next', '    a\n\n    b', '> quote', '> a\n>\n> b', '> > nested',

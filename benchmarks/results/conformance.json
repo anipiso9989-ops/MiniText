@@ -1,0 +1,1400 @@
+{
+  "environment": {
+    "date": "2026-10-30T22:00:55.176Z",
+    "node": "v24.22.1",
+    "v8": "13.6.233.17-node.58",
+    "os": "linux 6.18.57 x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCPUs": 9,
+    "sourceSHA256": "4c08c695536ee7dbbbf89539406f27ad0c4f78e8219ec7c1b6621e018ebf0256",
+    "versions": {
+      "@types/node": "24.10.1",
+      "esbuild": "0.28.2",
+      "happy-dom": "21.0.4",
+      "markdown-it": "14.3.3",
+      "marked": "18.1.2",
+      "micromark": "4.0.2",
+      "playwright": "1.62.1",
+      "typescript": "5.9.3"
+    }
+  },
+  "specification": "CommonMark 0.31.2",
+  "methodology": "All 652 official examples, images explicitly enabled. Normalize void-tag slashes, inter-tag newlines, boundary whitespace, quote character references, and the explicit loading=\"lazy\" image policy. Raw HTML remains escaped; URL allowlist and profile exclusions intentionally differ. A matched count is not a full-compliance claim.",
+  "matched": 471,
+  "total": 652,
+  "sections": {
+    "Tabs": {
+      "matched": 9,
+      "total": 11
+    },
+    "Backslash escapes": {
+      "matched": 10,
+      "total": 13
+    },
+    "Entity and numeric character references": {
+      "matched": 12,
+      "total": 17
+    },
+    "Precedence": {
+      "matched": 1,
+      "total": 1
+    },
+    "Thematic breaks": {
+      "matched": 19,
+      "total": 19
+    },
+    "ATX headings": {
+      "matched": 18,
+      "total": 18
+    },
+    "Setext headings": {
+      "matched": 26,
+      "total": 27
+    },
+    "Indented code blocks": {
+      "matched": 12,
+      "total": 12
+    },
+    "Fenced code blocks": {
+      "matched": 29,
+      "total": 29
+    },
+    "HTML blocks": {
+      "matched": 0,
+      "total": 44
+    },
+    "Link reference definitions": {
+      "matched": 6,
+      "total": 27
+    },
+    "Paragraphs": {
+      "matched": 8,
+      "total": 8
+    },
+    "Blank lines": {
+      "matched": 1,
+      "total": 1
+    },
+    "Block quotes": {
+      "matched": 19,
+      "total": 25
+    },
+    "List items": {
+      "matched": 41,
+      "total": 48
+    },
+    "Lists": {
+      "matched": 17,
+      "total": 26
+    },
+    "Inlines": {
+      "matched": 1,
+      "total": 1
+    },
+    "Code spans": {
+      "matched": 21,
+      "total": 22
+    },
+    "Emphasis and strong emphasis": {
+      "matched": 129,
+      "total": 132
+    },
+    "Links": {
+      "matched": 45,
+      "total": 90
+    },
+    "Images": {
+      "matched": 8,
+      "total": 22
+    },
+    "Autolinks": {
+      "matched": 14,
+      "total": 19
+    },
+    "Raw HTML": {
+      "matched": 7,
+      "total": 20
+    },
+    "Hard line breaks": {
+      "matched": 13,
+      "total": 15
+    },
+    "Soft line breaks": {
+      "matched": 2,
+      "total": 2
+    },
+    "Textual content": {
+      "matched": 3,
+      "total": 3
+    }
+  },
+  "mismatches": [
+    {
+      "example": 6,
+      "section": "Tabs",
+      "source": ">\t\tfoo\n",
+      "expected": "<blockquote>\n<pre><code>  foo\n</code></pre>\n</blockquote>\n",
+      "actual": "<blockquote>\n<p>foo</p>\n</blockquote>\n"
+    },
+    {
+      "example": 7,
+      "section": "Tabs",
+      "source": "-\t\tfoo\n",
+      "expected": "<ul>\n<li>\n<pre><code>  foo\n</code></pre>\n</li>\n</ul>\n",
+      "actual": "<ul>\n<li>foo</li>\n</ul>\n"
+    },
+    {
+      "example": 20,
+      "section": "Backslash escapes",
+      "source": "<https://example.com?find=\\*>\n",
+      "expected": "<p><a href=\"https://example.com?find=%5C*\">https://example.com?find=\\*</a></p>\n",
+      "actual": "<p>https://example.com?find=\\*</p>\n"
+    },
+    {
+      "example": 21,
+      "section": "Backslash escapes",
+      "source": "<a href=\"/bar\\/)\">\n",
+      "expected": "<a href=\"/bar\\/)\">\n",
+      "actual": "<p>&lt;a href=&quot;/bar/)&quot;&gt;</p>\n"
+    },
+    {
+      "example": 23,
+      "section": "Backslash escapes",
+      "source": "[foo]\n\n[foo]: /bar\\* \"ti\\*tle\"\n",
+      "expected": "<p><a href=\"/bar*\" title=\"ti*tle\">foo</a></p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: /bar* &quot;ti*tle&quot;</p>\n"
+    },
+    {
+      "example": 25,
+      "section": "Entity and numeric character references",
+      "source": "&nbsp; &amp; &copy; &AElig; &Dcaron;\n&frac34; &HilbertSpace; &DifferentialD;\n&ClockwiseContourIntegral; &ngE;\n",
+      "expected": "<p>  &amp; © Æ Ď\n¾ ℋ ⅆ\n∲ ≧̸</p>\n",
+      "actual": "<p>  &amp; &amp;copy; &amp;AElig; &amp;Dcaron;\n&amp;frac34; &amp;HilbertSpace; &amp;DifferentialD;\n&amp;ClockwiseContourIntegral; &amp;ngE;</p>\n"
+    },
+    {
+      "example": 31,
+      "section": "Entity and numeric character references",
+      "source": "<a href=\"&ouml;&ouml;.html\">\n",
+      "expected": "<a href=\"&ouml;&ouml;.html\">\n",
+      "actual": "<p>&lt;a href=&quot;&amp;ouml;&amp;ouml;.html&quot;&gt;</p>\n"
+    },
+    {
+      "example": 32,
+      "section": "Entity and numeric character references",
+      "source": "[foo](/f&ouml;&ouml; \"f&ouml;&ouml;\")\n",
+      "expected": "<p><a href=\"/f%C3%B6%C3%B6\" title=\"föö\">foo</a></p>\n",
+      "actual": "<p><a href=\"/f&amp;ouml;&amp;ouml;\" title=\"f&amp;ouml;&amp;ouml;\">foo</a></p>\n"
+    },
+    {
+      "example": 33,
+      "section": "Entity and numeric character references",
+      "source": "[foo]\n\n[foo]: /f&ouml;&ouml; \"f&ouml;&ouml;\"\n",
+      "expected": "<p><a href=\"/f%C3%B6%C3%B6\" title=\"föö\">foo</a></p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: /f&amp;ouml;&amp;ouml; &quot;f&amp;ouml;&amp;ouml;&quot;</p>\n"
+    },
+    {
+      "example": 34,
+      "section": "Entity and numeric character references",
+      "source": "``` f&ouml;&ouml;\nfoo\n```\n",
+      "expected": "<pre><code class=\"language-föö\">foo\n</code></pre>\n",
+      "actual": "<pre><code class=\"language-f&amp;ouml;&amp;ouml;\">foo\n</code></pre>\n"
+    },
+    {
+      "example": 93,
+      "section": "Setext headings",
+      "source": "> foo\nbar\n===\n",
+      "expected": "<blockquote>\n<p>foo\nbar\n===</p>\n</blockquote>\n",
+      "actual": "<blockquote>\n<p>foo</p>\n</blockquote>\n<h1>bar</h1>\n"
+    },
+    {
+      "example": 148,
+      "section": "HTML blocks",
+      "source": "<table><tr><td>\n<pre>\n**Hello**,\n\n_world_.\n</pre>\n</td></tr></table>\n",
+      "expected": "<table><tr><td>\n<pre>\n**Hello**,\n<p><em>world</em>.\n</pre></p>\n</td></tr></table>\n",
+      "actual": "<p>&lt;table&gt;&lt;tr&gt;&lt;td&gt;\n&lt;pre&gt;\n<strong>Hello</strong>,</p>\n<p><em>world</em>.\n&lt;/pre&gt;\n&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</p>\n"
+    },
+    {
+      "example": 149,
+      "section": "HTML blocks",
+      "source": "<table>\n  <tr>\n    <td>\n           hi\n    </td>\n  </tr>\n</table>\n\nokay.\n",
+      "expected": "<table>\n  <tr>\n    <td>\n           hi\n    </td>\n  </tr>\n</table>\n<p>okay.</p>\n",
+      "actual": "<p>&lt;table&gt;\n&lt;tr&gt;\n&lt;td&gt;\nhi\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/table&gt;</p>\n<p>okay.</p>\n"
+    },
+    {
+      "example": 150,
+      "section": "HTML blocks",
+      "source": " <div>\n  *hello*\n         <foo><a>\n",
+      "expected": " <div>\n  *hello*\n         <foo><a>\n",
+      "actual": "<p>&lt;div&gt;\n<em>hello</em>\n&lt;foo&gt;&lt;a&gt;</p>\n"
+    },
+    {
+      "example": 151,
+      "section": "HTML blocks",
+      "source": "</div>\n*foo*\n",
+      "expected": "</div>\n*foo*\n",
+      "actual": "<p>&lt;/div&gt;\n<em>foo</em></p>\n"
+    },
+    {
+      "example": 152,
+      "section": "HTML blocks",
+      "source": "<DIV CLASS=\"foo\">\n\n*Markdown*\n\n</DIV>\n",
+      "expected": "<DIV CLASS=\"foo\">\n<p><em>Markdown</em></p>\n</DIV>\n",
+      "actual": "<p>&lt;DIV CLASS=&quot;foo&quot;&gt;</p>\n<p><em>Markdown</em></p>\n<p>&lt;/DIV&gt;</p>\n"
+    },
+    {
+      "example": 153,
+      "section": "HTML blocks",
+      "source": "<div id=\"foo\"\n  class=\"bar\">\n</div>\n",
+      "expected": "<div id=\"foo\"\n  class=\"bar\">\n</div>\n",
+      "actual": "<p>&lt;div id=&quot;foo&quot;\nclass=&quot;bar&quot;&gt;\n&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 154,
+      "section": "HTML blocks",
+      "source": "<div id=\"foo\" class=\"bar\n  baz\">\n</div>\n",
+      "expected": "<div id=\"foo\" class=\"bar\n  baz\">\n</div>\n",
+      "actual": "<p>&lt;div id=&quot;foo&quot; class=&quot;bar\nbaz&quot;&gt;\n&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 155,
+      "section": "HTML blocks",
+      "source": "<div>\n*foo*\n\n*bar*\n",
+      "expected": "<div>\n*foo*\n<p><em>bar</em></p>\n",
+      "actual": "<p>&lt;div&gt;\n<em>foo</em></p>\n<p><em>bar</em></p>\n"
+    },
+    {
+      "example": 156,
+      "section": "HTML blocks",
+      "source": "<div id=\"foo\"\n*hi*\n",
+      "expected": "<div id=\"foo\"\n*hi*\n",
+      "actual": "<p>&lt;div id=&quot;foo&quot;\n<em>hi</em></p>\n"
+    },
+    {
+      "example": 157,
+      "section": "HTML blocks",
+      "source": "<div class\nfoo\n",
+      "expected": "<div class\nfoo\n",
+      "actual": "<p>&lt;div class\nfoo</p>\n"
+    },
+    {
+      "example": 158,
+      "section": "HTML blocks",
+      "source": "<div *???-&&&-<---\n*foo*\n",
+      "expected": "<div *???-&&&-<---\n*foo*\n",
+      "actual": "<p>&lt;div *???-&amp;&amp;&amp;-&lt;---\n<em>foo</em></p>\n"
+    },
+    {
+      "example": 159,
+      "section": "HTML blocks",
+      "source": "<div><a href=\"bar\">*foo*</a></div>\n",
+      "expected": "<div><a href=\"bar\">*foo*</a></div>\n",
+      "actual": "<p>&lt;div&gt;&lt;a href=&quot;bar&quot;&gt;<em>foo</em>&lt;/a&gt;&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 160,
+      "section": "HTML blocks",
+      "source": "<table><tr><td>\nfoo\n</td></tr></table>\n",
+      "expected": "<table><tr><td>\nfoo\n</td></tr></table>\n",
+      "actual": "<p>&lt;table&gt;&lt;tr&gt;&lt;td&gt;\nfoo\n&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</p>\n"
+    },
+    {
+      "example": 161,
+      "section": "HTML blocks",
+      "source": "<div></div>\n``` c\nint x = 33;\n```\n",
+      "expected": "<div></div>\n``` c\nint x = 33;\n```\n",
+      "actual": "<p>&lt;div&gt;&lt;/div&gt;</p>\n<pre><code class=\"language-c\">int x = 33;\n</code></pre>\n"
+    },
+    {
+      "example": 162,
+      "section": "HTML blocks",
+      "source": "<a href=\"foo\">\n*bar*\n</a>\n",
+      "expected": "<a href=\"foo\">\n*bar*\n</a>\n",
+      "actual": "<p>&lt;a href=&quot;foo&quot;&gt;\n<em>bar</em>\n&lt;/a&gt;</p>\n"
+    },
+    {
+      "example": 163,
+      "section": "HTML blocks",
+      "source": "<Warning>\n*bar*\n</Warning>\n",
+      "expected": "<Warning>\n*bar*\n</Warning>\n",
+      "actual": "<p>&lt;Warning&gt;\n<em>bar</em>\n&lt;/Warning&gt;</p>\n"
+    },
+    {
+      "example": 164,
+      "section": "HTML blocks",
+      "source": "<i class=\"foo\">\n*bar*\n</i>\n",
+      "expected": "<i class=\"foo\">\n*bar*\n</i>\n",
+      "actual": "<p>&lt;i class=&quot;foo&quot;&gt;\n<em>bar</em>\n&lt;/i&gt;</p>\n"
+    },
+    {
+      "example": 165,
+      "section": "HTML blocks",
+      "source": "</ins>\n*bar*\n",
+      "expected": "</ins>\n*bar*\n",
+      "actual": "<p>&lt;/ins&gt;\n<em>bar</em></p>\n"
+    },
+    {
+      "example": 166,
+      "section": "HTML blocks",
+      "source": "<del>\n*foo*\n</del>\n",
+      "expected": "<del>\n*foo*\n</del>\n",
+      "actual": "<p>&lt;del&gt;\n<em>foo</em>\n&lt;/del&gt;</p>\n"
+    },
+    {
+      "example": 167,
+      "section": "HTML blocks",
+      "source": "<del>\n\n*foo*\n\n</del>\n",
+      "expected": "<del>\n<p><em>foo</em></p>\n</del>\n",
+      "actual": "<p>&lt;del&gt;</p>\n<p><em>foo</em></p>\n<p>&lt;/del&gt;</p>\n"
+    },
+    {
+      "example": 168,
+      "section": "HTML blocks",
+      "source": "<del>*foo*</del>\n",
+      "expected": "<p><del><em>foo</em></del></p>\n",
+      "actual": "<p>&lt;del&gt;<em>foo</em>&lt;/del&gt;</p>\n"
+    },
+    {
+      "example": 169,
+      "section": "HTML blocks",
+      "source": "<pre language=\"haskell\"><code>\nimport Text.HTML.TagSoup\n\nmain :: IO ()\nmain = print $ parseTags tags\n</code></pre>\nokay\n",
+      "expected": "<pre language=\"haskell\"><code>\nimport Text.HTML.TagSoup\n\nmain :: IO ()\nmain = print $ parseTags tags\n</code></pre>\n<p>okay</p>\n",
+      "actual": "<p>&lt;pre language=&quot;haskell&quot;&gt;&lt;code&gt;\nimport Text.HTML.TagSoup</p>\n<p>main :: IO ()\nmain = print $ parseTags tags\n&lt;/code&gt;&lt;/pre&gt;\nokay</p>\n"
+    },
+    {
+      "example": 170,
+      "section": "HTML blocks",
+      "source": "<script type=\"text/javascript\">\n// JavaScript example\n\ndocument.getElementById(\"demo\").innerHTML = \"Hello JavaScript!\";\n</script>\nokay\n",
+      "expected": "<script type=\"text/javascript\">\n// JavaScript example\n\ndocument.getElementById(\"demo\").innerHTML = \"Hello JavaScript!\";\n</script>\n<p>okay</p>\n",
+      "actual": "<p>&lt;script type=&quot;text/javascript&quot;&gt;\n// JavaScript example</p>\n<p>document.getElementById(&quot;demo&quot;).innerHTML = &quot;Hello JavaScript!&quot;;\n&lt;/script&gt;\nokay</p>\n"
+    },
+    {
+      "example": 171,
+      "section": "HTML blocks",
+      "source": "<textarea>\n\n*foo*\n\n_bar_\n\n</textarea>\n",
+      "expected": "<textarea>\n\n*foo*\n\n_bar_\n\n</textarea>\n",
+      "actual": "<p>&lt;textarea&gt;</p>\n<p><em>foo</em></p>\n<p><em>bar</em></p>\n<p>&lt;/textarea&gt;</p>\n"
+    },
+    {
+      "example": 172,
+      "section": "HTML blocks",
+      "source": "<style\n  type=\"text/css\">\nh1 {color:red;}\n\np {color:blue;}\n</style>\nokay\n",
+      "expected": "<style\n  type=\"text/css\">\nh1 {color:red;}\n\np {color:blue;}\n</style>\n<p>okay</p>\n",
+      "actual": "<p>&lt;style\ntype=&quot;text/css&quot;&gt;\nh1 {color:red;}</p>\n<p>p {color:blue;}\n&lt;/style&gt;\nokay</p>\n"
+    },
+    {
+      "example": 173,
+      "section": "HTML blocks",
+      "source": "<style\n  type=\"text/css\">\n\nfoo\n",
+      "expected": "<style\n  type=\"text/css\">\n\nfoo\n",
+      "actual": "<p>&lt;style\ntype=&quot;text/css&quot;&gt;</p>\n<p>foo</p>\n"
+    },
+    {
+      "example": 174,
+      "section": "HTML blocks",
+      "source": "> <div>\n> foo\n\nbar\n",
+      "expected": "<blockquote>\n<div>\nfoo\n</blockquote>\n<p>bar</p>\n",
+      "actual": "<blockquote>\n<p>&lt;div&gt;\nfoo</p>\n</blockquote>\n<p>bar</p>\n"
+    },
+    {
+      "example": 175,
+      "section": "HTML blocks",
+      "source": "- <div>\n- foo\n",
+      "expected": "<ul>\n<li>\n<div>\n</li>\n<li>foo</li>\n</ul>\n",
+      "actual": "<ul>\n<li>&lt;div&gt;</li>\n<li>foo</li>\n</ul>\n"
+    },
+    {
+      "example": 176,
+      "section": "HTML blocks",
+      "source": "<style>p{color:red;}</style>\n*foo*\n",
+      "expected": "<style>p{color:red;}</style>\n<p><em>foo</em></p>\n",
+      "actual": "<p>&lt;style&gt;p{color:red;}&lt;/style&gt;\n<em>foo</em></p>\n"
+    },
+    {
+      "example": 177,
+      "section": "HTML blocks",
+      "source": "<!-- foo -->*bar*\n*baz*\n",
+      "expected": "<!-- foo -->*bar*\n<p><em>baz</em></p>\n",
+      "actual": "<p>&lt;!-- foo --&gt;<em>bar</em>\n<em>baz</em></p>\n"
+    },
+    {
+      "example": 178,
+      "section": "HTML blocks",
+      "source": "<script>\nfoo\n</script>1. *bar*\n",
+      "expected": "<script>\nfoo\n</script>1. *bar*\n",
+      "actual": "<p>&lt;script&gt;\nfoo\n&lt;/script&gt;1. <em>bar</em></p>\n"
+    },
+    {
+      "example": 179,
+      "section": "HTML blocks",
+      "source": "<!-- Foo\n\nbar\n   baz -->\nokay\n",
+      "expected": "<!-- Foo\n\nbar\n   baz -->\n<p>okay</p>\n",
+      "actual": "<p>&lt;!-- Foo</p>\n<p>bar\nbaz --&gt;\nokay</p>\n"
+    },
+    {
+      "example": 180,
+      "section": "HTML blocks",
+      "source": "<?php\n\n  echo '>';\n\n?>\nokay\n",
+      "expected": "<?php\n\n  echo '>';\n\n?>\n<p>okay</p>\n",
+      "actual": "<p>&lt;?php</p>\n<p>echo &#39;&gt;&#39;;</p>\n<p>?&gt;\nokay</p>\n"
+    },
+    {
+      "example": 181,
+      "section": "HTML blocks",
+      "source": "<!DOCTYPE html>\n",
+      "expected": "<!DOCTYPE html>\n",
+      "actual": "<p>&lt;!DOCTYPE html&gt;</p>\n"
+    },
+    {
+      "example": 182,
+      "section": "HTML blocks",
+      "source": "<![CDATA[\nfunction matchwo(a,b)\n{\n  if (a < b && a < 0) then {\n    return 1;\n\n  } else {\n\n    return 0;\n  }\n}\n]]>\nokay\n",
+      "expected": "<![CDATA[\nfunction matchwo(a,b)\n{\n  if (a < b && a < 0) then {\n    return 1;\n\n  } else {\n\n    return 0;\n  }\n}\n]]>\n<p>okay</p>\n",
+      "actual": "<p>&lt;![CDATA[\nfunction matchwo(a,b)\n{\nif (a &lt; b &amp;&amp; a &lt; 0) then {\nreturn 1;</p>\n<p>} else {</p>\n<pre><code>return 0;\n</code></pre>\n<p>}\n}\n]]&gt;\nokay</p>\n"
+    },
+    {
+      "example": 183,
+      "section": "HTML blocks",
+      "source": "  <!-- foo -->\n\n    <!-- foo -->\n",
+      "expected": "  <!-- foo -->\n<pre><code>&lt;!-- foo --&gt;\n</code></pre>\n",
+      "actual": "<p>&lt;!-- foo --&gt;</p>\n<pre><code>&lt;!-- foo --&gt;\n</code></pre>\n"
+    },
+    {
+      "example": 184,
+      "section": "HTML blocks",
+      "source": "  <div>\n\n    <div>\n",
+      "expected": "  <div>\n<pre><code>&lt;div&gt;\n</code></pre>\n",
+      "actual": "<p>&lt;div&gt;</p>\n<pre><code>&lt;div&gt;\n</code></pre>\n"
+    },
+    {
+      "example": 185,
+      "section": "HTML blocks",
+      "source": "Foo\n<div>\nbar\n</div>\n",
+      "expected": "<p>Foo</p>\n<div>\nbar\n</div>\n",
+      "actual": "<p>Foo\n&lt;div&gt;\nbar\n&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 186,
+      "section": "HTML blocks",
+      "source": "<div>\nbar\n</div>\n*foo*\n",
+      "expected": "<div>\nbar\n</div>\n*foo*\n",
+      "actual": "<p>&lt;div&gt;\nbar\n&lt;/div&gt;\n<em>foo</em></p>\n"
+    },
+    {
+      "example": 187,
+      "section": "HTML blocks",
+      "source": "Foo\n<a href=\"bar\">\nbaz\n",
+      "expected": "<p>Foo\n<a href=\"bar\">\nbaz</p>\n",
+      "actual": "<p>Foo\n&lt;a href=&quot;bar&quot;&gt;\nbaz</p>\n"
+    },
+    {
+      "example": 188,
+      "section": "HTML blocks",
+      "source": "<div>\n\n*Emphasized* text.\n\n</div>\n",
+      "expected": "<div>\n<p><em>Emphasized</em> text.</p>\n</div>\n",
+      "actual": "<p>&lt;div&gt;</p>\n<p><em>Emphasized</em> text.</p>\n<p>&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 189,
+      "section": "HTML blocks",
+      "source": "<div>\n*Emphasized* text.\n</div>\n",
+      "expected": "<div>\n*Emphasized* text.\n</div>\n",
+      "actual": "<p>&lt;div&gt;\n<em>Emphasized</em> text.\n&lt;/div&gt;</p>\n"
+    },
+    {
+      "example": 190,
+      "section": "HTML blocks",
+      "source": "<table>\n\n<tr>\n\n<td>\nHi\n</td>\n\n</tr>\n\n</table>\n",
+      "expected": "<table>\n<tr>\n<td>\nHi\n</td>\n</tr>\n</table>\n",
+      "actual": "<p>&lt;table&gt;</p>\n<p>&lt;tr&gt;</p>\n<p>&lt;td&gt;\nHi\n&lt;/td&gt;</p>\n<p>&lt;/tr&gt;</p>\n<p>&lt;/table&gt;</p>\n"
+    },
+    {
+      "example": 191,
+      "section": "HTML blocks",
+      "source": "<table>\n\n  <tr>\n\n    <td>\n      Hi\n    </td>\n\n  </tr>\n\n</table>\n",
+      "expected": "<table>\n  <tr>\n<pre><code>&lt;td&gt;\n  Hi\n&lt;/td&gt;\n</code></pre>\n  </tr>\n</table>\n",
+      "actual": "<p>&lt;table&gt;</p>\n<p>&lt;tr&gt;</p>\n<pre><code>&lt;td&gt;\n  Hi\n&lt;/td&gt;\n</code></pre>\n<p>&lt;/tr&gt;</p>\n<p>&lt;/table&gt;</p>\n"
+    },
+    {
+      "example": 192,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url \"title\"\n\n[foo]\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>[foo]: /url &quot;title&quot;</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 193,
+      "section": "Link reference definitions",
+      "source": "   [foo]: \n      /url  \n           'the title'  \n\n[foo]\n",
+      "expected": "<p><a href=\"/url\" title=\"the title\">foo</a></p>\n",
+      "actual": "<p>[foo]:\n/url<br>\n&#39;the title&#39;</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 194,
+      "section": "Link reference definitions",
+      "source": "[Foo*bar\\]]:my_(url) 'title (with parens)'\n\n[Foo*bar\\]]\n",
+      "expected": "<p><a href=\"my_(url)\" title=\"title (with parens)\">Foo*bar]</a></p>\n",
+      "actual": "<p>[Foo*bar]]:my_(url) &#39;title (with parens)&#39;</p>\n<p>[Foo*bar]]</p>\n"
+    },
+    {
+      "example": 195,
+      "section": "Link reference definitions",
+      "source": "[Foo bar]:\n<my url>\n'title'\n\n[Foo bar]\n",
+      "expected": "<p><a href=\"my%20url\" title=\"title\">Foo bar</a></p>\n",
+      "actual": "<p>[Foo bar]:\n&lt;my url&gt;\n&#39;title&#39;</p>\n<p>[Foo bar]</p>\n"
+    },
+    {
+      "example": 196,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url '\ntitle\nline1\nline2\n'\n\n[foo]\n",
+      "expected": "<p><a href=\"/url\" title=\"\ntitle\nline1\nline2\n\">foo</a></p>\n",
+      "actual": "<p>[foo]: /url &#39;\ntitle\nline1\nline2\n&#39;</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 198,
+      "section": "Link reference definitions",
+      "source": "[foo]:\n/url\n\n[foo]\n",
+      "expected": "<p><a href=\"/url\">foo</a></p>\n",
+      "actual": "<p>[foo]:\n/url</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 200,
+      "section": "Link reference definitions",
+      "source": "[foo]: <>\n\n[foo]\n",
+      "expected": "<p><a href=\"\">foo</a></p>\n",
+      "actual": "<p>[foo]: &lt;&gt;</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 201,
+      "section": "Link reference definitions",
+      "source": "[foo]: <bar>(baz)\n\n[foo]\n",
+      "expected": "<p>[foo]: <bar>(baz)</p>\n<p>[foo]</p>\n",
+      "actual": "<p>[foo]: &lt;bar&gt;(baz)</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 202,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url\\bar\\*baz \"foo\\\"bar\\baz\"\n\n[foo]\n",
+      "expected": "<p><a href=\"/url%5Cbar*baz\" title=\"foo&quot;bar\\baz\">foo</a></p>\n",
+      "actual": "<p>[foo]: /url\\bar*baz &quot;foo&quot;bar\\baz&quot;</p>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 203,
+      "section": "Link reference definitions",
+      "source": "[foo]\n\n[foo]: url\n",
+      "expected": "<p><a href=\"url\">foo</a></p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: url</p>\n"
+    },
+    {
+      "example": 204,
+      "section": "Link reference definitions",
+      "source": "[foo]\n\n[foo]: first\n[foo]: second\n",
+      "expected": "<p><a href=\"first\">foo</a></p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: first\n[foo]: second</p>\n"
+    },
+    {
+      "example": 205,
+      "section": "Link reference definitions",
+      "source": "[FOO]: /url\n\n[Foo]\n",
+      "expected": "<p><a href=\"/url\">Foo</a></p>\n",
+      "actual": "<p>[FOO]: /url</p>\n<p>[Foo]</p>\n"
+    },
+    {
+      "example": 206,
+      "section": "Link reference definitions",
+      "source": "[ΑΓΩ]: /φου\n\n[αγω]\n",
+      "expected": "<p><a href=\"/%CF%86%CE%BF%CF%85\">αγω</a></p>\n",
+      "actual": "<p>[ΑΓΩ]: /φου</p>\n<p>[αγω]</p>\n"
+    },
+    {
+      "example": 207,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url\n",
+      "expected": "",
+      "actual": "<p>[foo]: /url</p>\n"
+    },
+    {
+      "example": 208,
+      "section": "Link reference definitions",
+      "source": "[\nfoo\n]: /url\nbar\n",
+      "expected": "<p>bar</p>\n",
+      "actual": "<p>[\nfoo\n]: /url\nbar</p>\n"
+    },
+    {
+      "example": 210,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url\n\"title\" ok\n",
+      "expected": "<p>&quot;title&quot; ok</p>\n",
+      "actual": "<p>[foo]: /url\n&quot;title&quot; ok</p>\n"
+    },
+    {
+      "example": 214,
+      "section": "Link reference definitions",
+      "source": "# [Foo]\n[foo]: /url\n> bar\n",
+      "expected": "<h1><a href=\"/url\">Foo</a></h1>\n<blockquote>\n<p>bar</p>\n</blockquote>\n",
+      "actual": "<h1>[Foo]</h1>\n<p>[foo]: /url</p>\n<blockquote>\n<p>bar</p>\n</blockquote>\n"
+    },
+    {
+      "example": 215,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url\nbar\n===\n[foo]\n",
+      "expected": "<h1>bar</h1>\n<p><a href=\"/url\">foo</a></p>\n",
+      "actual": "<h1>[foo]: /url\nbar</h1>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 216,
+      "section": "Link reference definitions",
+      "source": "[foo]: /url\n===\n[foo]\n",
+      "expected": "<p>===\n<a href=\"/url\">foo</a></p>\n",
+      "actual": "<h1>[foo]: /url</h1>\n<p>[foo]</p>\n"
+    },
+    {
+      "example": 217,
+      "section": "Link reference definitions",
+      "source": "[foo]: /foo-url \"foo\"\n[bar]: /bar-url\n  \"bar\"\n[baz]: /baz-url\n\n[foo],\n[bar],\n[baz]\n",
+      "expected": "<p><a href=\"/foo-url\" title=\"foo\">foo</a>,\n<a href=\"/bar-url\" title=\"bar\">bar</a>,\n<a href=\"/baz-url\">baz</a></p>\n",
+      "actual": "<p>[foo]: /foo-url &quot;foo&quot;\n[bar]: /bar-url\n&quot;bar&quot;\n[baz]: /baz-url</p>\n<p>[foo],\n[bar],\n[baz]</p>\n"
+    },
+    {
+      "example": 218,
+      "section": "Link reference definitions",
+      "source": "[foo]\n\n> [foo]: /url\n",
+      "expected": "<p><a href=\"/url\">foo</a></p>\n<blockquote>\n</blockquote>\n",
+      "actual": "<p>[foo]</p>\n<blockquote>\n<p>[foo]: /url</p>\n</blockquote>\n"
+    },
+    {
+      "example": 232,
+      "section": "Block quotes",
+      "source": "> # Foo\n> bar\nbaz\n",
+      "expected": "<blockquote>\n<h1>Foo</h1>\n<p>bar\nbaz</p>\n</blockquote>\n",
+      "actual": "<blockquote>\n<h1>Foo</h1>\n<p>bar</p>\n</blockquote>\n<p>baz</p>\n"
+    },
+    {
+      "example": 233,
+      "section": "Block quotes",
+      "source": "> bar\nbaz\n> foo\n",
+      "expected": "<blockquote>\n<p>bar\nbaz\nfoo</p>\n</blockquote>\n",
+      "actual": "<blockquote>\n<p>bar</p>\n</blockquote>\n<p>baz</p>\n<blockquote>\n<p>foo</p>\n</blockquote>\n"
+    },
+    {
+      "example": 238,
+      "section": "Block quotes",
+      "source": "> foo\n    - bar\n",
+      "expected": "<blockquote>\n<p>foo\n- bar</p>\n</blockquote>\n",
+      "actual": "<blockquote>\n<p>foo</p>\n</blockquote>\n<pre><code>- bar\n</code></pre>\n"
+    },
+    {
+      "example": 247,
+      "section": "Block quotes",
+      "source": "> bar\nbaz\n",
+      "expected": "<blockquote>\n<p>bar\nbaz</p>\n</blockquote>\n",
+      "actual": "<blockquote>\n<p>bar</p>\n</blockquote>\n<p>baz</p>\n"
+    },
+    {
+      "example": 250,
+      "section": "Block quotes",
+      "source": "> > > foo\nbar\n",
+      "expected": "<blockquote>\n<blockquote>\n<blockquote>\n<p>foo\nbar</p>\n</blockquote>\n</blockquote>\n</blockquote>\n",
+      "actual": "<blockquote>\n<blockquote>\n<blockquote>\n<p>foo</p>\n</blockquote>\n</blockquote>\n</blockquote>\n<p>bar</p>\n"
+    },
+    {
+      "example": 251,
+      "section": "Block quotes",
+      "source": ">>> foo\n> bar\n>>baz\n",
+      "expected": "<blockquote>\n<blockquote>\n<blockquote>\n<p>foo\nbar\nbaz</p>\n</blockquote>\n</blockquote>\n</blockquote>\n",
+      "actual": "<blockquote>\n<blockquote>\n<blockquote>\n<p>foo</p>\n</blockquote>\n</blockquote>\n<p>bar</p>\n<blockquote>\n<p>baz</p>\n</blockquote>\n</blockquote>\n"
+    },
+    {
+      "example": 264,
+      "section": "List items",
+      "source": "- Foo\n\n      bar\n\n\n      baz\n",
+      "expected": "<ul>\n<li>\n<p>Foo</p>\n<pre><code>bar\n\n\nbaz\n</code></pre>\n</li>\n</ul>\n",
+      "actual": "<ul>\n<li><p>Foo</p>\n<pre><code>bar\n\nbaz\n</code></pre>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 279,
+      "section": "List items",
+      "source": "-   \n  foo\n",
+      "expected": "<ul>\n<li>foo</li>\n</ul>\n",
+      "actual": "<ul>\n<li></li>\n</ul>\n<p>foo</p>\n"
+    },
+    {
+      "example": 280,
+      "section": "List items",
+      "source": "-\n\n  foo\n",
+      "expected": "<ul>\n<li></li>\n</ul>\n<p>foo</p>\n",
+      "actual": "<ul>\n<li><p>foo</p>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 290,
+      "section": "List items",
+      "source": "  1.  A paragraph\nwith two lines.\n\n          indented code\n\n      > A block quote.\n",
+      "expected": "<ol>\n<li>\n<p>A paragraph\nwith two lines.</p>\n<pre><code>indented code\n</code></pre>\n<blockquote>\n<p>A block quote.</p>\n</blockquote>\n</li>\n</ol>\n",
+      "actual": "<ol>\n<li>A paragraph</li>\n</ol>\n<p>with two lines.</p>\n<pre><code>      indented code\n\n  &gt; A block quote.\n</code></pre>\n"
+    },
+    {
+      "example": 291,
+      "section": "List items",
+      "source": "  1.  A paragraph\n    with two lines.\n",
+      "expected": "<ol>\n<li>A paragraph\nwith two lines.</li>\n</ol>\n",
+      "actual": "<ol>\n<li>A paragraph</li>\n</ol>\n<pre><code>with two lines.\n</code></pre>\n"
+    },
+    {
+      "example": 292,
+      "section": "List items",
+      "source": "> 1. > Blockquote\ncontinued here.\n",
+      "expected": "<blockquote>\n<ol>\n<li>\n<blockquote>\n<p>Blockquote\ncontinued here.</p>\n</blockquote>\n</li>\n</ol>\n</blockquote>\n",
+      "actual": "<blockquote>\n<ol>\n<li><blockquote>\n<p>Blockquote</p>\n</blockquote>\n</li>\n</ol>\n</blockquote>\n<p>continued here.</p>\n"
+    },
+    {
+      "example": 293,
+      "section": "List items",
+      "source": "> 1. > Blockquote\n> continued here.\n",
+      "expected": "<blockquote>\n<ol>\n<li>\n<blockquote>\n<p>Blockquote\ncontinued here.</p>\n</blockquote>\n</li>\n</ol>\n</blockquote>\n",
+      "actual": "<blockquote>\n<ol>\n<li><blockquote>\n<p>Blockquote</p>\n</blockquote>\n</li>\n</ol>\n<p>continued here.</p>\n</blockquote>\n"
+    },
+    {
+      "example": 307,
+      "section": "Lists",
+      "source": "- foo\n  - bar\n    - baz\n\n\n      bim\n",
+      "expected": "<ul>\n<li>foo\n<ul>\n<li>bar\n<ul>\n<li>\n<p>baz</p>\n<p>bim</p>\n</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>\n",
+      "actual": "<ul>\n<li><p>foo</p>\n<ul>\n<li><p>bar</p>\n<ul>\n<li><p>baz</p>\n<p>bim</p>\n</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 308,
+      "section": "Lists",
+      "source": "- foo\n- bar\n\n<!-- -->\n\n- baz\n- bim\n",
+      "expected": "<ul>\n<li>foo</li>\n<li>bar</li>\n</ul>\n<!-- -->\n<ul>\n<li>baz</li>\n<li>bim</li>\n</ul>\n",
+      "actual": "<ul>\n<li>foo</li>\n<li>bar</li>\n</ul>\n<p>&lt;!-- --&gt;</p>\n<ul>\n<li>baz</li>\n<li>bim</li>\n</ul>\n"
+    },
+    {
+      "example": 309,
+      "section": "Lists",
+      "source": "-   foo\n\n    notcode\n\n-   foo\n\n<!-- -->\n\n    code\n",
+      "expected": "<ul>\n<li>\n<p>foo</p>\n<p>notcode</p>\n</li>\n<li>\n<p>foo</p>\n</li>\n</ul>\n<!-- -->\n<pre><code>code\n</code></pre>\n",
+      "actual": "<ul>\n<li><p>foo</p>\n<p>notcode</p>\n</li>\n<li><p>foo</p>\n</li>\n</ul>\n<p>&lt;!-- --&gt;</p>\n<pre><code>code\n</code></pre>\n"
+    },
+    {
+      "example": 311,
+      "section": "Lists",
+      "source": "1. a\n\n  2. b\n\n   3. c\n",
+      "expected": "<ol>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n</li>\n<li>\n<p>c</p>\n</li>\n</ol>\n",
+      "actual": "<ol>\n<li>a</li>\n<li>b</li>\n<li>c</li>\n</ol>\n"
+    },
+    {
+      "example": 312,
+      "section": "Lists",
+      "source": "- a\n - b\n  - c\n   - d\n    - e\n",
+      "expected": "<ul>\n<li>a</li>\n<li>b</li>\n<li>c</li>\n<li>d\n- e</li>\n</ul>\n",
+      "actual": "<ul>\n<li>a</li>\n<li>b</li>\n<li>c</li>\n<li>d</li>\n</ul>\n<pre><code>- e\n</code></pre>\n"
+    },
+    {
+      "example": 313,
+      "section": "Lists",
+      "source": "1. a\n\n  2. b\n\n    3. c\n",
+      "expected": "<ol>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n</li>\n</ol>\n<pre><code>3. c\n</code></pre>\n",
+      "actual": "<ol>\n<li>a</li>\n<li>b</li>\n</ol>\n<pre><code>3. c\n</code></pre>\n"
+    },
+    {
+      "example": 317,
+      "section": "Lists",
+      "source": "- a\n- b\n\n  [ref]: /url\n- d\n",
+      "expected": "<ul>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n</li>\n<li>\n<p>d</p>\n</li>\n</ul>\n",
+      "actual": "<ul>\n<li><p>a</p>\n</li>\n<li><p>b</p>\n<p>[ref]: /url</p>\n</li>\n<li><p>d</p>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 318,
+      "section": "Lists",
+      "source": "- a\n- ```\n  b\n\n\n  ```\n- c\n",
+      "expected": "<ul>\n<li>a</li>\n<li>\n<pre><code>b\n\n\n</code></pre>\n</li>\n<li>c</li>\n</ul>\n",
+      "actual": "<ul>\n<li><p>a</p>\n</li>\n<li><pre><code>b\n\n</code></pre>\n</li>\n<li><p>c</p>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 319,
+      "section": "Lists",
+      "source": "- a\n  - b\n\n    c\n- d\n",
+      "expected": "<ul>\n<li>a\n<ul>\n<li>\n<p>b</p>\n<p>c</p>\n</li>\n</ul>\n</li>\n<li>d</li>\n</ul>\n",
+      "actual": "<ul>\n<li><p>a</p>\n<ul>\n<li><p>b</p>\n<p>c</p>\n</li>\n</ul>\n</li>\n<li><p>d</p>\n</li>\n</ul>\n"
+    },
+    {
+      "example": 344,
+      "section": "Code spans",
+      "source": "<a href=\"`\">`\n",
+      "expected": "<p><a href=\"`\">`</p>\n",
+      "actual": "<p>&lt;a href=&quot;<code>&quot;&gt;</code></p>\n"
+    },
+    {
+      "example": 475,
+      "section": "Emphasis and strong emphasis",
+      "source": "*<img src=\"foo\" title=\"*\"/>\n",
+      "expected": "<p>*<img src=\"foo\" title=\"*\"/></p>\n",
+      "actual": "<p><em>&lt;img src=&quot;foo&quot; title=&quot;</em>&quot;/&gt;</p>\n"
+    },
+    {
+      "example": 476,
+      "section": "Emphasis and strong emphasis",
+      "source": "**<a href=\"**\">\n",
+      "expected": "<p>**<a href=\"**\"></p>\n",
+      "actual": "<p><strong>&lt;a href=&quot;</strong>&quot;&gt;</p>\n"
+    },
+    {
+      "example": 477,
+      "section": "Emphasis and strong emphasis",
+      "source": "__<a href=\"__\">\n",
+      "expected": "<p>__<a href=\"__\"></p>\n",
+      "actual": "<p><strong>&lt;a href=&quot;</strong>&quot;&gt;</p>\n"
+    },
+    {
+      "example": 491,
+      "section": "Links",
+      "source": "[link](<foo\nbar>)\n",
+      "expected": "<p>[link](<foo\nbar>)</p>\n",
+      "actual": "<p>[link](&lt;foo\nbar&gt;)</p>\n"
+    },
+    {
+      "example": 494,
+      "section": "Links",
+      "source": "[a](<b)c\n[a](<b)c>\n[a](<b>c)\n",
+      "expected": "<p>[a](&lt;b)c\n[a](&lt;b)c&gt;\n[a](<b>c)</p>\n",
+      "actual": "<p>[a](&lt;b)c\n[a](&lt;b)c&gt;\n[a](&lt;b&gt;c)</p>\n"
+    },
+    {
+      "example": 502,
+      "section": "Links",
+      "source": "[link](foo\\bar)\n",
+      "expected": "<p><a href=\"foo%5Cbar\">link</a></p>\n",
+      "actual": "<p>link</p>\n"
+    },
+    {
+      "example": 503,
+      "section": "Links",
+      "source": "[link](foo%20b&auml;)\n",
+      "expected": "<p><a href=\"foo%20b%C3%A4\">link</a></p>\n",
+      "actual": "<p><a href=\"foo%20b&amp;auml;\">link</a></p>\n"
+    },
+    {
+      "example": 524,
+      "section": "Links",
+      "source": "[foo <bar attr=\"](baz)\">\n",
+      "expected": "<p>[foo <bar attr=\"](baz)\"></p>\n",
+      "actual": "<p><a href=\"baz\">foo &lt;bar attr=&quot;</a>&quot;&gt;</p>\n"
+    },
+    {
+      "example": 527,
+      "section": "Links",
+      "source": "[foo][bar]\n\n[bar]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>[foo][bar]</p>\n<p>[bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 528,
+      "section": "Links",
+      "source": "[link [foo [bar]]][ref]\n\n[ref]: /uri\n",
+      "expected": "<p><a href=\"/uri\">link [foo [bar]]</a></p>\n",
+      "actual": "<p>[link [foo [bar]]][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 529,
+      "section": "Links",
+      "source": "[link \\[bar][ref]\n\n[ref]: /uri\n",
+      "expected": "<p><a href=\"/uri\">link [bar</a></p>\n",
+      "actual": "<p>[link [bar][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 530,
+      "section": "Links",
+      "source": "[link *foo **bar** `#`*][ref]\n\n[ref]: /uri\n",
+      "expected": "<p><a href=\"/uri\">link <em>foo <strong>bar</strong> <code>#</code></em></a></p>\n",
+      "actual": "<p>[link <em>foo <strong>bar</strong> <code>#</code></em>][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 531,
+      "section": "Links",
+      "source": "[![moon](moon.jpg)][ref]\n\n[ref]: /uri\n",
+      "expected": "<p><a href=\"/uri\"><img src=\"moon.jpg\" alt=\"moon\" /></a></p>\n",
+      "actual": "<p>[<img src=\"moon.jpg\" alt=\"moon\" loading=\"lazy\">][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 532,
+      "section": "Links",
+      "source": "[foo [bar](/uri)][ref]\n\n[ref]: /uri\n",
+      "expected": "<p>[foo <a href=\"/uri\">bar</a>]<a href=\"/uri\">ref</a></p>\n",
+      "actual": "<p>[foo <a href=\"/uri\">bar</a>][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 533,
+      "section": "Links",
+      "source": "[foo *bar [baz][ref]*][ref]\n\n[ref]: /uri\n",
+      "expected": "<p>[foo <em>bar <a href=\"/uri\">baz</a></em>]<a href=\"/uri\">ref</a></p>\n",
+      "actual": "<p>[foo <em>bar [baz][ref]</em>][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 534,
+      "section": "Links",
+      "source": "*[foo*][ref]\n\n[ref]: /uri\n",
+      "expected": "<p>*<a href=\"/uri\">foo*</a></p>\n",
+      "actual": "<p><em>[foo</em>][ref]</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 535,
+      "section": "Links",
+      "source": "[foo *bar][ref]*\n\n[ref]: /uri\n",
+      "expected": "<p><a href=\"/uri\">foo *bar</a>*</p>\n",
+      "actual": "<p>[foo <em>bar][ref]</em></p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 536,
+      "section": "Links",
+      "source": "[foo <bar attr=\"][ref]\">\n\n[ref]: /uri\n",
+      "expected": "<p>[foo <bar attr=\"][ref]\"></p>\n",
+      "actual": "<p>[foo &lt;bar attr=&quot;][ref]&quot;&gt;</p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 537,
+      "section": "Links",
+      "source": "[foo`][ref]`\n\n[ref]: /uri\n",
+      "expected": "<p>[foo<code>][ref]</code></p>\n",
+      "actual": "<p>[foo<code>][ref]</code></p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 538,
+      "section": "Links",
+      "source": "[foo<https://example.com/?search=][ref]>\n\n[ref]: /uri\n",
+      "expected": "<p>[foo<a href=\"https://example.com/?search=%5D%5Bref%5D\">https://example.com/?search=][ref]</a></p>\n",
+      "actual": "<p>[foo<a href=\"https://example.com/?search=%5D%5Bref%5D\">https://example.com/?search=][ref]</a></p>\n<p>[ref]: /uri</p>\n"
+    },
+    {
+      "example": 539,
+      "section": "Links",
+      "source": "[foo][BaR]\n\n[bar]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>[foo][BaR]</p>\n<p>[bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 540,
+      "section": "Links",
+      "source": "[ẞ]\n\n[SS]: /url\n",
+      "expected": "<p><a href=\"/url\">ẞ</a></p>\n",
+      "actual": "<p>[ẞ]</p>\n<p>[SS]: /url</p>\n"
+    },
+    {
+      "example": 541,
+      "section": "Links",
+      "source": "[Foo\n  bar]: /url\n\n[Baz][Foo bar]\n",
+      "expected": "<p><a href=\"/url\">Baz</a></p>\n",
+      "actual": "<p>[Foo\nbar]: /url</p>\n<p>[Baz][Foo bar]</p>\n"
+    },
+    {
+      "example": 542,
+      "section": "Links",
+      "source": "[foo] [bar]\n\n[bar]: /url \"title\"\n",
+      "expected": "<p>[foo] <a href=\"/url\" title=\"title\">bar</a></p>\n",
+      "actual": "<p>[foo] [bar]</p>\n<p>[bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 543,
+      "section": "Links",
+      "source": "[foo]\n[bar]\n\n[bar]: /url \"title\"\n",
+      "expected": "<p>[foo]\n<a href=\"/url\" title=\"title\">bar</a></p>\n",
+      "actual": "<p>[foo]\n[bar]</p>\n<p>[bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 544,
+      "section": "Links",
+      "source": "[foo]: /url1\n\n[foo]: /url2\n\n[bar][foo]\n",
+      "expected": "<p><a href=\"/url1\">bar</a></p>\n",
+      "actual": "<p>[foo]: /url1</p>\n<p>[foo]: /url2</p>\n<p>[bar][foo]</p>\n"
+    },
+    {
+      "example": 545,
+      "section": "Links",
+      "source": "[bar][foo\\!]\n\n[foo!]: /url\n",
+      "expected": "<p>[bar][foo!]</p>\n",
+      "actual": "<p>[bar][foo!]</p>\n<p>[foo!]: /url</p>\n"
+    },
+    {
+      "example": 549,
+      "section": "Links",
+      "source": "[foo][ref\\[]\n\n[ref\\[]: /uri\n",
+      "expected": "<p><a href=\"/uri\">foo</a></p>\n",
+      "actual": "<p>[foo][ref[]</p>\n<p>[ref[]: /uri</p>\n"
+    },
+    {
+      "example": 550,
+      "section": "Links",
+      "source": "[bar\\\\]: /uri\n\n[bar\\\\]\n",
+      "expected": "<p><a href=\"/uri\">bar\\</a></p>\n",
+      "actual": "<p>[bar\\]: /uri</p>\n<p>[bar\\]</p>\n"
+    },
+    {
+      "example": 553,
+      "section": "Links",
+      "source": "[foo][]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>[foo][]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 554,
+      "section": "Links",
+      "source": "[*foo* bar][]\n\n[*foo* bar]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\"><em>foo</em> bar</a></p>\n",
+      "actual": "<p>[<em>foo</em> bar][]</p>\n<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 555,
+      "section": "Links",
+      "source": "[Foo][]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">Foo</a></p>\n",
+      "actual": "<p>[Foo][]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 556,
+      "section": "Links",
+      "source": "[foo] \n[]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a>\n[]</p>\n",
+      "actual": "<p>[foo]\n[]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 557,
+      "section": "Links",
+      "source": "[foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 558,
+      "section": "Links",
+      "source": "[*foo* bar]\n\n[*foo* bar]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\"><em>foo</em> bar</a></p>\n",
+      "actual": "<p>[<em>foo</em> bar]</p>\n<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 559,
+      "section": "Links",
+      "source": "[[*foo* bar]]\n\n[*foo* bar]: /url \"title\"\n",
+      "expected": "<p>[<a href=\"/url\" title=\"title\"><em>foo</em> bar</a>]</p>\n",
+      "actual": "<p>[[<em>foo</em> bar]]</p>\n<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 560,
+      "section": "Links",
+      "source": "[[bar [foo]\n\n[foo]: /url\n",
+      "expected": "<p>[[bar <a href=\"/url\">foo</a></p>\n",
+      "actual": "<p>[[bar [foo]</p>\n<p>[foo]: /url</p>\n"
+    },
+    {
+      "example": 561,
+      "section": "Links",
+      "source": "[Foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><a href=\"/url\" title=\"title\">Foo</a></p>\n",
+      "actual": "<p>[Foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 562,
+      "section": "Links",
+      "source": "[foo] bar\n\n[foo]: /url\n",
+      "expected": "<p><a href=\"/url\">foo</a> bar</p>\n",
+      "actual": "<p>[foo] bar</p>\n<p>[foo]: /url</p>\n"
+    },
+    {
+      "example": 563,
+      "section": "Links",
+      "source": "\\[foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p>[foo]</p>\n",
+      "actual": "<p>[foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 564,
+      "section": "Links",
+      "source": "[foo*]: /url\n\n*[foo*]\n",
+      "expected": "<p>*<a href=\"/url\">foo*</a></p>\n",
+      "actual": "<p>[foo*]: /url</p>\n<p><em>[foo</em>]</p>\n"
+    },
+    {
+      "example": 565,
+      "section": "Links",
+      "source": "[foo][bar]\n\n[foo]: /url1\n[bar]: /url2\n",
+      "expected": "<p><a href=\"/url2\">foo</a></p>\n",
+      "actual": "<p>[foo][bar]</p>\n<p>[foo]: /url1\n[bar]: /url2</p>\n"
+    },
+    {
+      "example": 566,
+      "section": "Links",
+      "source": "[foo][]\n\n[foo]: /url1\n",
+      "expected": "<p><a href=\"/url1\">foo</a></p>\n",
+      "actual": "<p>[foo][]</p>\n<p>[foo]: /url1</p>\n"
+    },
+    {
+      "example": 567,
+      "section": "Links",
+      "source": "[foo]()\n\n[foo]: /url1\n",
+      "expected": "<p><a href=\"\">foo</a></p>\n",
+      "actual": "<p><a href=\"\">foo</a></p>\n<p>[foo]: /url1</p>\n"
+    },
+    {
+      "example": 568,
+      "section": "Links",
+      "source": "[foo](not a link)\n\n[foo]: /url1\n",
+      "expected": "<p><a href=\"/url1\">foo</a>(not a link)</p>\n",
+      "actual": "<p>[foo](not a link)</p>\n<p>[foo]: /url1</p>\n"
+    },
+    {
+      "example": 569,
+      "section": "Links",
+      "source": "[foo][bar][baz]\n\n[baz]: /url\n",
+      "expected": "<p>[foo]<a href=\"/url\">bar</a></p>\n",
+      "actual": "<p>[foo][bar][baz]</p>\n<p>[baz]: /url</p>\n"
+    },
+    {
+      "example": 570,
+      "section": "Links",
+      "source": "[foo][bar][baz]\n\n[baz]: /url1\n[bar]: /url2\n",
+      "expected": "<p><a href=\"/url2\">foo</a><a href=\"/url1\">baz</a></p>\n",
+      "actual": "<p>[foo][bar][baz]</p>\n<p>[baz]: /url1\n[bar]: /url2</p>\n"
+    },
+    {
+      "example": 571,
+      "section": "Links",
+      "source": "[foo][bar][baz]\n\n[baz]: /url1\n[foo]: /url2\n",
+      "expected": "<p>[foo]<a href=\"/url1\">bar</a></p>\n",
+      "actual": "<p>[foo][bar][baz]</p>\n<p>[baz]: /url1\n[foo]: /url2</p>\n"
+    },
+    {
+      "example": 573,
+      "section": "Images",
+      "source": "![foo *bar*]\n\n[foo *bar*]: train.jpg \"train & tracks\"\n",
+      "expected": "<p><img src=\"train.jpg\" alt=\"foo bar\" title=\"train &amp; tracks\" /></p>\n",
+      "actual": "<p>![foo <em>bar</em>]</p>\n<p>[foo <em>bar</em>]: train.jpg &quot;train &amp; tracks&quot;</p>\n"
+    },
+    {
+      "example": 576,
+      "section": "Images",
+      "source": "![foo *bar*][]\n\n[foo *bar*]: train.jpg \"train & tracks\"\n",
+      "expected": "<p><img src=\"train.jpg\" alt=\"foo bar\" title=\"train &amp; tracks\" /></p>\n",
+      "actual": "<p>![foo <em>bar</em>][]</p>\n<p>[foo <em>bar</em>]: train.jpg &quot;train &amp; tracks&quot;</p>\n"
+    },
+    {
+      "example": 577,
+      "section": "Images",
+      "source": "![foo *bar*][foobar]\n\n[FOOBAR]: train.jpg \"train & tracks\"\n",
+      "expected": "<p><img src=\"train.jpg\" alt=\"foo bar\" title=\"train &amp; tracks\" /></p>\n",
+      "actual": "<p>![foo <em>bar</em>][foobar]</p>\n<p>[FOOBAR]: train.jpg &quot;train &amp; tracks&quot;</p>\n"
+    },
+    {
+      "example": 582,
+      "section": "Images",
+      "source": "![foo][bar]\n\n[bar]: /url\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo\" /></p>\n",
+      "actual": "<p>![foo][bar]</p>\n<p>[bar]: /url</p>\n"
+    },
+    {
+      "example": 583,
+      "section": "Images",
+      "source": "![foo][bar]\n\n[BAR]: /url\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo\" /></p>\n",
+      "actual": "<p>![foo][bar]</p>\n<p>[BAR]: /url</p>\n"
+    },
+    {
+      "example": 584,
+      "section": "Images",
+      "source": "![foo][]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo\" title=\"title\" /></p>\n",
+      "actual": "<p>![foo][]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 585,
+      "section": "Images",
+      "source": "![*foo* bar][]\n\n[*foo* bar]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo bar\" title=\"title\" /></p>\n",
+      "actual": "<p>![<em>foo</em> bar][]</p>\n<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 586,
+      "section": "Images",
+      "source": "![Foo][]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"Foo\" title=\"title\" /></p>\n",
+      "actual": "<p>![Foo][]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 587,
+      "section": "Images",
+      "source": "![foo] \n[]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo\" title=\"title\" />\n[]</p>\n",
+      "actual": "<p>![foo]\n[]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 588,
+      "section": "Images",
+      "source": "![foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo\" title=\"title\" /></p>\n",
+      "actual": "<p>![foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 589,
+      "section": "Images",
+      "source": "![*foo* bar]\n\n[*foo* bar]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"foo bar\" title=\"title\" /></p>\n",
+      "actual": "<p>![<em>foo</em> bar]</p>\n<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 591,
+      "section": "Images",
+      "source": "![Foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p><img src=\"/url\" alt=\"Foo\" title=\"title\" /></p>\n",
+      "actual": "<p>![Foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 592,
+      "section": "Images",
+      "source": "!\\[foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p>![foo]</p>\n",
+      "actual": "<p>![foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 593,
+      "section": "Images",
+      "source": "\\![foo]\n\n[foo]: /url \"title\"\n",
+      "expected": "<p>!<a href=\"/url\" title=\"title\">foo</a></p>\n",
+      "actual": "<p>![foo]</p>\n<p>[foo]: /url &quot;title&quot;</p>\n"
+    },
+    {
+      "example": 596,
+      "section": "Autolinks",
+      "source": "<irc://foo.bar:2233/baz>\n",
+      "expected": "<p><a href=\"irc://foo.bar:2233/baz\">irc://foo.bar:2233/baz</a></p>\n",
+      "actual": "<p>irc://foo.bar:2233/baz</p>\n"
+    },
+    {
+      "example": 598,
+      "section": "Autolinks",
+      "source": "<a+b+c:d>\n",
+      "expected": "<p><a href=\"a+b+c:d\">a+b+c:d</a></p>\n",
+      "actual": "<p>a+b+c:d</p>\n"
+    },
+    {
+      "example": 599,
+      "section": "Autolinks",
+      "source": "<made-up-scheme://foo,bar>\n",
+      "expected": "<p><a href=\"made-up-scheme://foo,bar\">made-up-scheme://foo,bar</a></p>\n",
+      "actual": "<p>made-up-scheme://foo,bar</p>\n"
+    },
+    {
+      "example": 601,
+      "section": "Autolinks",
+      "source": "<localhost:5001/foo>\n",
+      "expected": "<p><a href=\"localhost:5001/foo\">localhost:5001/foo</a></p>\n",
+      "actual": "<p>localhost:5001/foo</p>\n"
+    },
+    {
+      "example": 603,
+      "section": "Autolinks",
+      "source": "<https://example.com/\\[\\>\n",
+      "expected": "<p><a href=\"https://example.com/%5C%5B%5C\">https://example.com/\\[\\</a></p>\n",
+      "actual": "<p>https://example.com/\\[\\</p>\n"
+    },
+    {
+      "example": 613,
+      "section": "Raw HTML",
+      "source": "<a><bab><c2c>\n",
+      "expected": "<p><a><bab><c2c></p>\n",
+      "actual": "<p>&lt;a&gt;&lt;bab&gt;&lt;c2c&gt;</p>\n"
+    },
+    {
+      "example": 614,
+      "section": "Raw HTML",
+      "source": "<a/><b2/>\n",
+      "expected": "<p><a/><b2/></p>\n",
+      "actual": "<p>&lt;a/&gt;&lt;b2/&gt;</p>\n"
+    },
+    {
+      "example": 615,
+      "section": "Raw HTML",
+      "source": "<a  /><b2\ndata=\"foo\" >\n",
+      "expected": "<p><a  /><b2\ndata=\"foo\" ></p>\n",
+      "actual": "<p>&lt;a  /&gt;&lt;b2\ndata=&quot;foo&quot; &gt;</p>\n"
+    },
+    {
+      "example": 616,
+      "section": "Raw HTML",
+      "source": "<a foo=\"bar\" bam = 'baz <em>\"</em>'\n_boolean zoop:33=zoop:33 />\n",
+      "expected": "<p><a foo=\"bar\" bam = 'baz <em>\"</em>'\n_boolean zoop:33=zoop:33 /></p>\n",
+      "actual": "<p>&lt;a foo=&quot;bar&quot; bam = &#39;baz &lt;em&gt;&quot;&lt;/em&gt;&#39;\n_boolean zoop:33=zoop:33 /&gt;</p>\n"
+    },
+    {
+      "example": 617,
+      "section": "Raw HTML",
+      "source": "Foo <responsive-image src=\"foo.jpg\" />\n",
+      "expected": "<p>Foo <responsive-image src=\"foo.jpg\" /></p>\n",
+      "actual": "<p>Foo &lt;responsive-image src=&quot;foo.jpg&quot; /&gt;</p>\n"
+    },
+    {
+      "example": 623,
+      "section": "Raw HTML",
+      "source": "</a></foo >\n",
+      "expected": "<p></a></foo ></p>\n",
+      "actual": "<p>&lt;/a&gt;&lt;/foo &gt;</p>\n"
+    },
+    {
+      "example": 625,
+      "section": "Raw HTML",
+      "source": "foo <!-- this is a --\ncomment - with hyphens -->\n",
+      "expected": "<p>foo <!-- this is a --\ncomment - with hyphens --></p>\n",
+      "actual": "<p>foo &lt;!-- this is a --\ncomment - with hyphens --&gt;</p>\n"
+    },
+    {
+      "example": 626,
+      "section": "Raw HTML",
+      "source": "foo <!--> foo -->\n\nfoo <!---> foo -->\n",
+      "expected": "<p>foo <!--> foo --&gt;</p>\n<p>foo <!---> foo --&gt;</p>\n",
+      "actual": "<p>foo &lt;!--&gt; foo --&gt;</p>\n<p>foo &lt;!---&gt; foo --&gt;</p>\n"
+    },
+    {
+      "example": 627,
+      "section": "Raw HTML",
+      "source": "foo <?php echo $a; ?>\n",
+      "expected": "<p>foo <?php echo $a; ?></p>\n",
+      "actual": "<p>foo &lt;?php echo $a; ?&gt;</p>\n"
+    },
+    {
+      "example": 628,
+      "section": "Raw HTML",
+      "source": "foo <!ELEMENT br EMPTY>\n",
+      "expected": "<p>foo <!ELEMENT br EMPTY></p>\n",
+      "actual": "<p>foo &lt;!ELEMENT br EMPTY&gt;</p>\n"
+    },
+    {
+      "example": 629,
+      "section": "Raw HTML",
+      "source": "foo <![CDATA[>&<]]>\n",
+      "expected": "<p>foo <![CDATA[>&<]]></p>\n",
+      "actual": "<p>foo &lt;![CDATA[&gt;&amp;&lt;]]&gt;</p>\n"
+    },
+    {
+      "example": 630,
+      "section": "Raw HTML",
+      "source": "foo <a href=\"&ouml;\">\n",
+      "expected": "<p>foo <a href=\"&ouml;\"></p>\n",
+      "actual": "<p>foo &lt;a href=&quot;&amp;ouml;&quot;&gt;</p>\n"
+    },
+    {
+      "example": 631,
+      "section": "Raw HTML",
+      "source": "foo <a href=\"\\*\">\n",
+      "expected": "<p>foo <a href=\"\\*\"></p>\n",
+      "actual": "<p>foo &lt;a href=&quot;*&quot;&gt;</p>\n"
+    },
+    {
+      "example": 642,
+      "section": "Hard line breaks",
+      "source": "<a href=\"foo  \nbar\">\n",
+      "expected": "<p><a href=\"foo  \nbar\"></p>\n",
+      "actual": "<p>&lt;a href=&quot;foo<br>\nbar&quot;&gt;</p>\n"
+    },
+    {
+      "example": 643,
+      "section": "Hard line breaks",
+      "source": "<a href=\"foo\\\nbar\">\n",
+      "expected": "<p><a href=\"foo\\\nbar\"></p>\n",
+      "actual": "<p>&lt;a href=&quot;foo<br>\nbar&quot;&gt;</p>\n"
+    }
+  ]
+}

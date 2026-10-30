@@ -1,4 +1,4 @@
-import type { Document, Extension, Inline, Node, Options, Output } from '../model/types.ts';
+import type { Document, Extension, Node, Options, Output } from '../model/types.ts';
 import { Budget, bytes, InputError } from '../limits.ts';
 import { escapeHTML, safeURL } from '../security.ts';
 
@@ -56,7 +56,14 @@ export function emitHTML(document: Document, options: Options, budget: Budget, e
       case 'image': return options.images && safeURL(node.url, true) !== undefined ? { tag: 'img', attrs: { src: node.url, alt: node.alt, loading: 'lazy', ...(node.title === undefined ? {} : { title: node.title }) } } : node.alt;
       case 'link': return safeURL(node.url) === undefined ? { tag: 'span', children: node.children.map(n => toOutput(n, depth + 1)) } : { tag: 'a', attrs: { href: node.url, ...(node.title === undefined ? {} : { title: node.title }) }, children: node.children.map(n => toOutput(n, depth + 1)) };
       case 'emphasis': case 'strong': return { tag: node.type === 'strong' ? 'strong' : 'em', children: node.children.map(n => toOutput(n, depth + 1)) };
-      default: return ''; // Block extensions should use their block children directly in their renderer.
+      case 'paragraph': return { tag: 'p', children: node.children.map(n => toOutput(n, depth + 1)) };
+      case 'heading': return { tag: `h${node.level}`, children: node.children.map(n => toOutput(n, depth + 1)) };
+      case 'thematicBreak': return { tag: 'hr' };
+      case 'codeBlock': return { tag: 'pre', children: [{ tag: 'code', attrs: node.language ? { class: `language-${node.language}` } : {}, children: [node.value] }] };
+      case 'blockquote': return { tag: 'blockquote', children: node.children.map(n => toOutput(n, depth + 1)) };
+      case 'listItem': return { tag: 'li', children: node.children.map(n => toOutput(n, depth + 1)) };
+      case 'list': return { tag: node.ordered ? 'ol' : 'ul', attrs: node.ordered ? { start: node.start } : {}, children: node.children.map(n => toOutput(n, depth + 1)) };
+      case 'document': return { tag: 'div', children: node.children.map(n => toOutput(n, depth + 1)) };
     }
   }
   function visit(node: Node, depth: number, tight = false): void {

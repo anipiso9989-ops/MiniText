@@ -1,4 +1,4 @@
-import type { Document, Options, Result } from './types.ts';
+import type { Document, ExtensionNode, Options, Result } from './types.ts';
 import { attempt, Budget, bytes, InputError } from '../limits.ts';
 
 const fields: Readonly<Record<string, readonly string[]>> = {
@@ -6,7 +6,7 @@ const fields: Readonly<Record<string, readonly string[]>> = {
   paragraph: ['children'], heading: ['level', 'children'], codeBlock: ['value', 'language'],
   emphasis: ['children'], strong: ['children'], link: ['url', 'title', 'children'], image: ['url', 'title', 'alt'],
   thematicBreak: [], blockquote: ['children'], list: ['ordered', 'start', 'tight', 'children'], listItem: ['children'],
-  extension: ['name', 'kind', 'data', 'fallback', 'children'],
+  extension: ['name', 'kind', 'content', 'data', 'fallback', 'children'],
 };
 const blockTypes = new Set(['paragraph', 'heading', 'codeBlock', 'blockquote', 'list', 'thematicBreak']);
 const inlineTypes = new Set(['text', 'code', 'softBreak', 'hardBreak', 'emphasis', 'strong', 'link', 'image']);
@@ -57,12 +57,17 @@ export function inspectDocument(value: unknown, budget: Budget): asserts value i
     if (type === 'link' || type === 'image') { string(n.url); if (n.title !== undefined) string(n.title); }
     if (type === 'image') string(n.alt);
     if (type === 'link' && inLink) invalid('Links cannot contain links');
-    if (type === 'extension') { string(n.name); string(n.fallback); json(n.data, depth + 1); }
+    if (type === 'extension') {
+      string(n.name); string(n.fallback); json(n.data, depth + 1);
+      if (n.content !== undefined && n.content !== 'block' && n.content !== 'inline') invalid('Invalid extension content kind');
+      if (n.kind === 'inline' && n.content === 'block') invalid('Inline extensions cannot contain blocks');
+    }
     if (fields[type as string]!.includes('children')) {
       if (!Array.isArray(n.children)) invalid('Expected children array');
-      const next = type === 'document' || type === 'blockquote' || type === 'listItem' ? 'block' : type === 'list' ? 'listItem' : type === 'extension' ? n.kind as 'block' | 'inline' : 'inline';
+      const next = type === 'document' || type === 'blockquote' || type === 'listItem' ? 'block' : type === 'list' ? 'listItem' : type === 'extension' ? (n.content ?? n.kind) as 'block' | 'inline' : 'inline';
       for (const child of n.children as unknown[]) visit(child, next, depth + 1, inLink || type === 'link');
     }
+    if (type === 'extension') budget.options.extensions?.find(extension => extension.name === n.name)?.validate?.(n as unknown as ExtensionNode);
     ancestors.delete(n);
   }
   visit(value, 'document', 0);

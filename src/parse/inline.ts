@@ -1,4 +1,4 @@
-import type { Inline, Extension, Link } from '../model/types.ts';
+import type { Inline, Extension, Link, Node } from '../model/types.ts';
 import { Budget } from '../limits.ts';
 import { decodeEntities, unescape } from '../security.ts';
 
@@ -38,7 +38,7 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
     budget.tick();
     let matched = false;
     for (const extension of extensions) {
-      const match = extension.inline?.({ source, index: i, parse: recurse });
+      const match = extension.inline?.({ source, index: i, parse: recurse, tick: n => budget.tick(n), node: n => budget.node(n) });
       if (!match) continue;
       if (!Number.isInteger(match.length) || match.length < 1 || match.length > source.length - i)
         throw new TypeError(`Extension ${extension.name} returned an invalid inline length`);
@@ -51,8 +51,10 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
       if (escapable.test(source[i + 1]!)) { flush(); text(source[i + 1]!); i += 2; continue; }
     }
     if (ch === '\n') {
-      const hard = / {2,}$/.test(plain);
-      plain = plain.replace(/[ \t]+$/, ''); flush();
+      const hard = plain.endsWith('  ');
+      let end = plain.length;
+      while (plain[end - 1] === ' ' || plain[end - 1] === '\t') { budget.tick(); end--; }
+      plain = plain.slice(0, end); flush();
       append({ type: hard ? 'hardBreak' : 'softBreak' });
       i++; while (source[i] === ' ' || source[i] === '\t') i++;
       continue;
@@ -85,6 +87,25 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
       for (; close < source.length; close++) {
         budget.tick();
         if (source[close] === '\\') { close++; continue; }
+        if (source[close] === '`') {
+          let run = close + 1; while (source[run] === '`') run++;
+          const marker = source.slice(close, run);
+          let found = run;
+          for (;;) {
+            const candidate = source.indexOf(marker, found);
+            budget.tick((candidate < 0 ? source.length : candidate) - found + 1);
+            if (candidate < 0) break;
+            let after = candidate + marker.length; while (source[after] === '`') after++;
+            if (after === candidate + marker.length && source[candidate - 1] !== '`') { close = after - 1; break; }
+            found = after;
+          }
+          continue;
+        }
+        if (source[close] === '<') {
+          const end = source.indexOf('>', close + 1);
+          budget.tick((end < 0 ? source.length : end) - close);
+          if (end >= 0 && /^(?:[a-z][a-z\d+.-]{1,31}:[^<>\s]*|[^<>\s]+@[^<>\s]+)$/i.test(source.slice(close + 1, end))) { close = end; continue; }
+        }
         if (source[close] === '[') nesting++;
         if (source[close] === ']') { nesting--; if (!nesting) break; }
       }
@@ -92,10 +113,12 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
         const destination = parseDestination(source, close + 2, budget);
         if (destination) {
           const label = source.slice(start, close);
+          const labelNodes = parseInline(label, budget, extensions, depth + 1, true);
+          if (!image && containsLink(labelNodes)) { plain += ch; i++; continue; }
           flush();
-          if (image) append({ type: 'image', url: destination.url, alt: inlineText(parseInline(label, budget, extensions, depth + 1, false)), ...(destination.title === undefined ? {} : { title: destination.title }) });
+          if (image) append({ type: 'image', url: destination.url, alt: inlineText(labelNodes), ...(destination.title === undefined ? {} : { title: destination.title }) });
           else {
-            const node: Link = { type: 'link', url: destination.url, children: parseInline(label, budget, extensions, depth + 1, false), ...(destination.title === undefined ? {} : { title: destination.title }) };
+            const node: Link = { type: 'link', url: destination.url, children: labelNodes, ...(destination.title === undefined ? {} : { title: destination.title }) };
             append(node);
           }
           i = destination.end; continue;
@@ -104,8 +127,8 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
     }
     if (ch === '<') {
       const end = source.indexOf('>', i + 1);
+      budget.tick((end < 0 ? source.length : end) - i);
       if (end >= 0) {
-        budget.tick(end - i);
         const value = source.slice(i + 1, end);
         const uri = /^[a-z][a-z\d+.-]{1,31}:[^<>\s]*$/i.test(value);
         const email = /^[a-z\d.!#$%&'*+/=?^_`{|}~-]+@[a-z\d](?:[a-z\d-]*[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]*[a-z\d])?)*$/i.test(value);
@@ -118,7 +141,7 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
     if (ch === '*' || ch === '_') {
       flush(); let end = i + 1;
       while (source[end] === ch) end++;
-      const before = i ? String.fromCodePoint(source.codePointAt(i - 1)!) : '\n';
+      const before = !i ? '\n' : i > 1 && /[\udc00-\udfff]/.test(source[i - 1]!) && /[\ud800-\udbff]/.test(source[i - 2]!) ? source.slice(i - 2, i) : source[i - 1]!;
       const after = end < source.length ? String.fromCodePoint(source.codePointAt(end)!) : '\n';
       const left = !space.test(after) && (!punctuation.test(after) || space.test(before) || punctuation.test(before));
       const right = !space.test(before) && (!punctuation.test(before) || space.test(after) || punctuation.test(after));
@@ -183,7 +206,7 @@ function parseDestination(source: string, start: number, budget: Budget): { url:
       if (ch === '\\' && i + 1 < source.length) { i += 2; continue; }
       if (ch === '(') { if (++depth > 32) return; }
       else if (ch === ')') { if (!depth) break; depth--; }
-      if (/\s/.test(ch)) break;
+      if (/[ \t\n]/.test(ch)) break;
       if (ch === '<' || /[\u0000-\u001f]/.test(ch)) return;
       i++;
     }
@@ -215,4 +238,7 @@ export function inlineText(nodes: readonly Inline[]): string {
       default: return inlineText(node.children);
     }
   }).join('');
+}
+function containsLink(nodes: readonly Node[]): boolean {
+  return nodes.some(node => node.type === 'link' || ('children' in node && containsLink(node.children)));
 }

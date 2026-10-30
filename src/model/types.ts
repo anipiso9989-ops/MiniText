@@ -33,6 +33,7 @@ export type Json = null | boolean | number | string | readonly Json[] | { readon
 export interface ExtensionNode {
   readonly type: 'extension';
   readonly kind: 'block' | 'inline';
+  readonly content?: 'block' | 'inline';
   readonly name: string;
   readonly data: Json;
   readonly fallback: string;
@@ -52,18 +53,25 @@ export interface InlineContext {
   readonly source: string;
   readonly index: number;
   parse(source: string): Inline[];
+  tick(amount?: number): void;
+  node<T extends Node>(value: T): T;
 }
 export interface BlockContext {
   readonly lines: readonly string[];
   readonly index: number;
   inline(source: string): Inline[];
   blocks(lines: readonly string[]): Block[];
+  tick(amount?: number): void;
+  node<T extends Node>(value: T): T;
 }
 export interface Extension {
   readonly name: string;
   readonly inline?: (context: InlineContext) => { readonly length: number; readonly node: Inline } | undefined;
   readonly block?: (context: BlockContext) => { readonly lines: number; readonly node: Block } | undefined;
+  readonly listItem?: (context: BlockContext) => ListItem | undefined;
   readonly transform?: (document: Document) => Document;
+  /** Validate imported feature data; throw InputError for invalid document data. */
+  readonly validate?: (node: ExtensionNode) => void;
   readonly render?: (node: ExtensionNode, children: readonly Output[]) => Output;
 }
 export interface Options {

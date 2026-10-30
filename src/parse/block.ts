@@ -22,10 +22,10 @@ export function parseDocument(source: string, budget: Budget, extensions: readon
       return ' '.repeat(width);
     });
   }
-  return budget.node({ type: 'document', children: parseBlocks(lines, budget, extensions, 1) });
+  return budget.node({ type: 'document', children: parseBlocks(lines, budget, extensions, 1, normalized.endsWith('\n')) });
 }
 
-export function parseBlocks(lines: readonly string[], budget: Budget, extensions: readonly Extension[], depth: number): Block[] {
+export function parseBlocks(lines: readonly string[], budget: Budget, extensions: readonly Extension[], depth: number, endWithLF = true): Block[] {
   budget.check(depth);
   const nodes: Block[] = [];
   const inline = (s: string) => parseInline(s, budget, extensions, depth + 1);
@@ -41,7 +41,7 @@ export function parseBlocks(lines: readonly string[], budget: Budget, extensions
     if (blank(line)) { i++; continue; }
     let matched = false;
     for (const extension of extensions) {
-      const match = extension.block?.({ lines, index: i, inline, blocks });
+      const match = extension.block?.({ lines, index: i, inline, blocks, tick: n => budget.tick(n), node: n => budget.node(n) });
       if (!match) continue;
       if (!Number.isInteger(match.lines) || match.lines < 1 || match.lines > lines.length - i)
         throw new TypeError(`Extension ${extension.name} returned an invalid block length`);
@@ -64,12 +64,15 @@ export function parseBlocks(lines: readonly string[], budget: Budget, extensions
       const terminalLF = !closed && content.at(-1) === '';
       if (terminalLF) content.pop();
       const language = unescape(f[3]!.trim()).split(/\s+/)[0];
-      nodes.push(budget.node({ type: 'codeBlock', value: content.length ? content.join('\n') + (closed || terminalLF ? '\n' : '') : '', ...(language ? { language } : {}) }));
+      nodes.push(budget.node({ type: 'codeBlock', value: content.length ? content.join('\n') + (closed || terminalLF || endWithLF ? '\n' : '') : '', ...(language ? { language } : {}) }));
       continue;
     }
     const h = heading(line);
     if (h) {
-      const value = (h[2] ?? '').replace(/(?:[ \t]+|^)#+[ \t]*$/, '').trim();
+      let value = (h[2] ?? '').trim();
+      let hashes = value.length;
+      while (value[hashes - 1] === '#') hashes--;
+      if (hashes < value.length && (hashes === 0 || value[hashes - 1] === ' ' || value[hashes - 1] === '\t')) value = value.slice(0, hashes).trimEnd();
       nodes.push(budget.node({ type: 'heading', level: h[1]!.length as Heading['level'], children: inline(value) })); i++; continue;
     }
     if (thematic(line)) { nodes.push(budget.node({ type: 'thematicBreak' })); i++; continue; }
@@ -114,7 +117,12 @@ export function parseBlocks(lines: readonly string[], budget: Budget, extensions
           break;
         }
         if (separated) tight = false;
-        items.push(budget.node({ type: 'listItem', children: blocks(content) }));
+        let item: ListItem | undefined;
+        for (const extension of extensions) {
+          item = extension.listItem?.({ lines: content, index: 0, inline, blocks, tick: n => budget.tick(n), node: n => budget.node(n) });
+          if (item) break;
+        }
+        items.push(budget.node(item ?? { type: 'listItem', children: blocks(content) }));
       }
       nodes.push(budget.node({ type: 'list', ordered, start: ordered ? Number.parseInt(first[2]!) : 1, tight, children: items })); continue;
     }
