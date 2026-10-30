@@ -1,0 +1,39 @@
+{
+  "name": "@mini/text",
+  "version": "0.1.0",
+  "description": "A small, bounded Markdown and structured document engine",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist", "README.md", "LICENSE", "docs"],
+  "exports": {
+    ".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"},
+    "./browser": {"types": "./dist/browser.d.ts", "import": "./dist/browser.js"},
+    "./rich-text": {"types": "./dist/features/rich-text.d.ts", "import": "./dist/features/rich-text.js"},
+    "./tables": {"types": "./dist/features/tables.d.ts", "import": "./dist/features/tables.js"},
+    "./strikethrough": {"types": "./dist/features/strikethrough.d.ts", "import": "./dist/features/strikethrough.js"},
+    "./task-lists": {"types": "./dist/features/task-lists.d.ts", "import": "./dist/features/task-lists.js"},
+    "./embeds": {"types": "./dist/features/embeds.d.ts", "import": "./dist/features/embeds.js"},
+    "./integration": {"types": "./dist/integration.d.ts", "import": "./dist/integration.js"}
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test tests/*.test.ts",
+    "bench": "node benchmarks/run.mjs",
+    "size": "node benchmarks/size.mjs",
+    "check": "npm run typecheck && npm test && npm run build && node scripts/check-package.mjs",
+    "prepack": "npm run build"
+  },
+  "engines": {"node": ">=20"},
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "esbuild": "0.28.2",
+    "happy-dom": "21.0.4",
+    "markdown-it": "14.3.3",
+    "marked": "18.1.2",
+    "micromark": "4.0.2",
+    "typescript": "5.9.3"
+  },
+  "repository": {"type": "git", "url": "https://github.com/anipiso9989-ops/MiniText.git"}
+}
