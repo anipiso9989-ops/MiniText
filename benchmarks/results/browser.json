@@ -1,0 +1,34 @@
+{
+  "environment": {
+    "date": "2026-10-30T22:02:40.897Z",
+    "node": "v24.22.1",
+    "v8": "13.6.233.17-node.58",
+    "os": "linux 6.18.57 x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCPUs": 9,
+    "sourceSHA256": "4c08c695536ee7dbbbf89539406f27ad0c4f78e8219ec7c1b6621e018ebf0256",
+    "versions": {
+      "@types/node": "24.10.1",
+      "esbuild": "0.28.2",
+      "happy-dom": "21.0.4",
+      "markdown-it": "14.3.3",
+      "marked": "18.1.2",
+      "micromark": "4.0.2",
+      "playwright": "1.62.1",
+      "typescript": "5.9.3"
+    }
+  },
+  "browser": "153.0.8010.0",
+  "checks": {
+    "reused": true,
+    "atomic": true,
+    "disposed": true,
+    "heading": "Title",
+    "headers": 2,
+    "labeledCheckbox": true,
+    "inert": true
+  },
+  "semantics": "- main:\n  - heading \"Title\" [level=1]\n  - table:\n    - rowgroup:\n      - row \"a b\":\n        - columnheader \"a\"\n        - columnheader \"b\"\n    - rowgroup:\n      - row \"x y\":\n        - cell \"x\"\n        - cell \"y\"\n  - list:\n    - listitem:\n      - checkbox \"Completed task\" [checked] [disabled]\n      - text: done\n  - paragraph: <script>globalThis.attacked=true</script>\n  - paragraph: alt",
+  "csp": "default-src 'none'; script-src 'self'; trusted-types mini-text; require-trusted-types-for 'script'",
+  "note": "Real Chromium correctness and accessibility-tree smoke test under CSP + Trusted Types; no browser performance comparison."
+}

@@ -1,0 +1,38 @@
+Node v24.22.1, source-only coverage.
+Reproduce: npm run test:coverage
+
+ℹ tests 598
+ℹ suites 0
+ℹ pass 598
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 866.62694
+ℹ start of coverage report
+ℹ -------------------------------------------------------------------
+ℹ file               | line % | branch % | funcs % | uncovered lines
+ℹ -------------------------------------------------------------------
+ℹ src                |        |          |         | 
+ℹ  backends          |        |          |         | 
+ℹ   html.ts          |  98.31 |    83.93 |   61.11 | 27-28
+ℹ  browser.ts        | 100.00 |   100.00 |   75.00 | 
+ℹ  features          |        |          |         | 
+ℹ   embeds.ts        | 100.00 |    82.76 |  100.00 | 
+ℹ   rich-text.ts     | 100.00 |    87.88 |   96.15 | 
+ℹ   strikethrough.ts |  94.74 |    77.78 |  100.00 | 26-27
+ℹ   tables.ts        | 100.00 |    94.29 |  100.00 | 
+ℹ   task-lists.ts    |  95.83 |    81.25 |  100.00 | 18
+ℹ  index.ts          | 100.00 |    95.65 |   80.00 | 
+ℹ  integration.ts    | 100.00 |    92.86 |  100.00 | 
+ℹ  limits.ts         | 100.00 |   100.00 |  100.00 | 
+ℹ  model             |        |          |         | 
+ℹ   validate.ts      |  95.95 |    96.84 |  100.00 | 37-39
+ℹ  parse             |        |          |         | 
+ℹ   block.ts         | 100.00 |   100.00 |   87.50 | 
+ℹ   inline.ts        | 100.00 |    98.41 |   92.31 | 
+ℹ  security.ts       | 100.00 |    93.10 |  100.00 | 
+ℹ -------------------------------------------------------------------
+ℹ all files          |  99.27 |    94.16 |   89.71 | 
+ℹ -------------------------------------------------------------------
+ℹ end of coverage report
