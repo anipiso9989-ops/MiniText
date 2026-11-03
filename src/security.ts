@@ -1,6 +1,20 @@
 /** One encoding and URL-policy implementation for every backend/feature. */
+const htmlEscapes: Readonly<Record<string, string>> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '\0': '\ufffd' };
+const htmlEscape = (character: string): string => htmlEscapes[character]!;
 export function escapeHTML(value: string): string {
-  return value.replace(/[&<>"'\u0000]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '\0': '\ufffd' })[c]!);
+  if (!/[&<>"'\u0000]/.test(value)) return value;
+  // Avoid a native-to-JS replacement callback for each entity in short values.
+  // Long values keep the native scan so sparse escapes do not cause a JS scan.
+  if (value.length > 256) return value.replace(/[&<>"'\u0000]/g, htmlEscape);
+  let output = '', start = 0;
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code === 38 || code === 60 || code === 62 || code === 34 || code === 39 || code === 0) {
+      output += value.slice(start, i) + htmlEscapes[value[i]!]!;
+      start = i + 1;
+    }
+  }
+  return output + value.slice(start);
 }
 export function safeURL(value: string, image = false): string | undefined {
   const url = value.trim();
@@ -9,7 +23,10 @@ export function safeURL(value: string, image = false): string | undefined {
   // Network-path references make resource ownership ambiguous.
   if (url.startsWith('//')) return;
   const scheme = /^([a-z][a-z\d+.-]*):/i.exec(url)?.[1]?.toLowerCase();
-  if (scheme && !(['http', 'https', ...(image ? [] : ['mailto', 'tel'])].includes(scheme))) return;
+  if (scheme && scheme !== 'http' && scheme !== 'https' && (image || (scheme !== 'mailto' && scheme !== 'tel'))) return;
+  // encodeURI leaves these ASCII characters unchanged. Valid existing escapes
+  // also survive the encoding-and-undoubling path below.
+  if (/^[\w;/?:@&=+$,#.!~*'()%-]*$/.test(url) && !/%(?![\da-f]{2})/i.test(url)) return url;
   const wellFormed = url.replace(/[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g, '\ufffd');
   return encodeURI(wellFormed).replace(/%25([\da-f]{2})/gi, '%$1');
 }
@@ -24,5 +41,6 @@ export function decodeEntities(source: string): string {
   });
 }
 export function unescape(source: string): string {
+  if (!/[\\&]/.test(source)) return source;
   return decodeEntities(source.replace(/\\([!"#$%&'()*+,\-./:;<=>?@[\]\\^_`{|}~])/g, '$1'));
 }

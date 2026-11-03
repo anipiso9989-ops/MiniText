@@ -15,11 +15,24 @@ interface Cell {
 const punctuation = /[\p{P}\p{S}]/u;
 const space = /\s/u;
 const escapable = /[!"#$%&'()*+,\-./:;<=>?@[\]\\^_`{|}~]/;
+const hasSyntax = /[\\\n`\[<!*_]/;
 
 export function parseInline(source: string, budget: Budget, extensions: readonly Extension[], depth: number, links = true): Inline[] {
   budget.check(depth);
+  // Keep the ordinary-text path outside the closure-heavy delimiter parser.
+  if (!hasSyntax.test(source) && !extensions.some(extension => extension.inline)) {
+    budget.tick(source.length);
+    const value = source.includes('&') ? decodeEntities(source) : source;
+    return value ? [budget.node({ type: 'text', value })] : [];
+  }
+  return parseSyntax(source, budget, extensions, depth, links);
+}
+
+function parseSyntax(source: string, budget: Budget, extensions: readonly Extension[], depth: number, links: boolean): Inline[] {
   let head: Cell | undefined, tail: Cell | undefined;
   const delimiters: Cell[] = [];
+  const inlineExtensions = extensions.filter(extension => extension.inline);
+  const special = /[\\\n`\[<!*_]/g;
   function append(node: Inline): Cell {
     const cell: Cell = { node: budget.node(node), prev: tail };
     if (tail) tail.next = cell; else head = cell;
@@ -33,11 +46,21 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
   }
   const recurse = (s: string) => parseInline(s, budget, extensions, depth + 1, links);
   let plain = '';
-  function flush(): void { text(decodeEntities(plain)); plain = ''; }
+  function flush(): void { text(plain.includes('&') ? decodeEntities(plain) : plain); plain = ''; }
   for (let i = 0; i < source.length;) {
+    // Hooks may recognize any character, so only batch text when none are active.
+    // Charge every skipped code unit to preserve the parser work limit.
+    if (!inlineExtensions.length) {
+      special.lastIndex = i;
+      const end = special.exec(source)?.index ?? source.length;
+      if (end > i) {
+        budget.tick(end - i); plain += source.slice(i, end); i = end;
+        if (i === source.length) break;
+      }
+    }
     budget.tick();
     let matched = false;
-    for (const extension of extensions) {
+    for (const extension of inlineExtensions) {
       const match = extension.inline?.({ source, index: i, parse: recurse, tick: n => budget.tick(n), node: n => budget.node(n) });
       if (!match) continue;
       if (!Number.isInteger(match.length) || match.length < 1 || match.length > source.length - i)
@@ -146,7 +169,10 @@ export function parseInline(source: string, budget: Budget, extensions: readonly
       const left = !space.test(after) && (!punctuation.test(after) || space.test(before) || punctuation.test(before));
       const right = !space.test(before) && (!punctuation.test(before) || space.test(after) || punctuation.test(after));
       const cell = append({ type: 'text', value: source.slice(i, end) });
-      Object.assign(cell, { mark: ch, count: end - i, open: ch === '*' ? left : left && (!right || punctuation.test(before)), close: ch === '*' ? right : right && (!left || punctuation.test(after)), active: true });
+      cell.mark = ch; cell.count = end - i;
+      cell.open = ch === '*' ? left : left && (!right || punctuation.test(before));
+      cell.close = ch === '*' ? right : right && (!left || punctuation.test(after));
+      cell.active = true;
       delimiters.push(cell); i = end; continue;
     }
     plain += ch; i++;

@@ -125,11 +125,14 @@ npm run check            # types, unit/security/fuzz/spec regressions, build, co
 npm run test:coverage    # instrumented source coverage
 npm run size             # minified/gzip/Brotli, competitors, lazy chunk assertions
 npm run bench            # isolated server import/init/render/retained-heap trials
+npm run bench:throughput # seven workloads, materialized HTML, five isolated trials
 npm run conformance      # all 652 CommonMark examples; records every mismatch
 npx playwright install chromium
 npm run test:browser     # real Chromium, semantics, focus, CSP + Trusted Types
 ```
 
 Committed [raw reports](benchmarks/results) include environment, pinned dependency versions and a source hash. [Measurement notes](docs/benchmarks.md) explain scope and limitations. Competitors support broader grammars and produce different artifacts; no universal speed, memory or compliance advantage is claimed.
+
+The 2026-11-03 seven-workload server suite records 2.66× the original MiniText throughput, with geometric-mean throughput 82.8% above marked and 20.3% above markdown-it. Marked remains faster on the code workload; MiniText and markdown-it are effectively tied there. The tree-shaken render bundle is 21,283 bytes minified, 8,148 bytes gzip and 7,396 bytes Brotli. See the measurement notes for every workload, exact size savings, compatibility limits and reproduction commands.
 
 MIT for the implementation. The official CommonMark fixture has its own [CC BY-SA 4.0 notice](benchmarks/fixtures/README.md).

@@ -10,6 +10,8 @@ export class InputError extends Error {
 }
 /** No shared encoder buffer or retained document state. */
 export function bytes(text: string): number {
+  // V8 can scan an ASCII run without a JavaScript iteration per code unit.
+  if (!/[^\x00-\x7f]/.test(text)) return text.length;
   let size = 0;
   for (let i = 0; i < text.length; i++) {
     const c = text.charCodeAt(i);
@@ -27,11 +29,13 @@ export class Budget {
   private work = 0;
   constructor(options: Options) {
     this.options = options;
-    this.limits = { ...defaultLimits, ...options.limits };
-    for (const [key, value] of Object.entries(this.limits)) {
-      if (!Number.isSafeInteger(value) || value < 1) throw new TypeError(`Invalid limit: ${key}`);
+    this.limits = options.limits ? { ...defaultLimits, ...options.limits } : defaultLimits;
+    if (options.limits) {
+      for (const [key, value] of Object.entries(this.limits)) {
+        if (!Number.isSafeInteger(value) || value < 1) throw new TypeError(`Invalid limit: ${key}`);
+      }
+      if (this.limits.maxDepth > 256) throw new TypeError('maxDepth must be at most 256');
     }
-    if (this.limits.maxDepth > 256) throw new TypeError('maxDepth must be at most 256');
     this.check();
   }
   check(depth = 0): void {

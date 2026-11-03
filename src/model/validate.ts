@@ -1,4 +1,4 @@
-import type { Document, ExtensionNode, Options, Result } from './types.ts';
+import type { Document, ExtensionNode, Node, Options, Result } from './types.ts';
 import { attempt, Budget, bytes, InputError } from '../limits.ts';
 
 const fields: Readonly<Record<string, readonly string[]>> = {
@@ -10,6 +10,33 @@ const fields: Readonly<Record<string, readonly string[]>> = {
 };
 const blockTypes = new Set(['paragraph', 'heading', 'codeBlock', 'blockquote', 'list', 'thematicBreak']);
 const inlineTypes = new Set(['text', 'code', 'softBreak', 'hardBreak', 'emphasis', 'strong', 'link', 'image']);
+
+/** Internal parser output has known shapes. Still enforce every final-tree budget.
+ * Never use this for caller-owned ASTs or trees touched by extensions. */
+export function inspectParsedDocument(document: Document, budget: Budget): void {
+  let inputBytes = 0;
+  function string(value: string): void {
+    inputBytes += bytes(value);
+  }
+  function visit(node: Node, depth: number): void {
+    budget.check(depth); budget.node(node);
+    let keys = 2;
+    switch (node.type) {
+      case 'text': case 'code': string(node.value); break;
+      case 'codeBlock': string(node.value); if (node.language !== undefined) { string(node.language); keys++; } break;
+      case 'heading': keys++; break;
+      case 'list': keys = 5; break;
+      case 'link': string(node.url); if (node.title !== undefined) { string(node.title); keys++; } keys++; break;
+      case 'image': string(node.url); if (node.title !== undefined) { string(node.title); keys++; } string(node.alt); keys++; break;
+      case 'softBreak': case 'hardBreak': case 'thematicBreak': keys = 1; break;
+      case 'extension': throw new TypeError('Extension tree requires full validation');
+    }
+    budget.tick(keys);
+    if (inputBytes > budget.limits.maxInputBytes) throw new InputError('MAX_INPUT_BYTES', 'AST text byte limit exceeded');
+    if ('children' in node) for (const child of node.children) visit(child, depth + 1);
+  }
+  visit(document, 0);
+}
 
 /** Validates without cloning. Treat accepted trees as immutable values. */
 export function validateDocument(value: unknown, options: Options = {}): Result<Document> {

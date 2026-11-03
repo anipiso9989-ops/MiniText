@@ -37,7 +37,13 @@ for (const dependency of initial[1].imports.filter(entry => entry.kind !== 'dyna
   const shared = lazy.metafile.outputs[dependency.path];
   assert.ok(shared && Object.keys(shared.inputs).every(p => !p.includes('/features/')), 'Initial static dependencies must exclude optional features');
 }
-const report = { environment: await environment(), methodology: 'esbuild browser/ES2022 ESM bundles, minify+tree-shake, gzip level 9, Brotli default. Feature-alone rows exclude the core; compression sizes are not additive. Other libraries implement broader Markdown grammars.', rows, lazyChunks: outputs.map(([file, info]) => ({ file, bytes: info.bytes, inputs: Object.keys(info.inputs) })) };
+const compared = ['MiniText render', 'marked', 'markdown-it'].map(name => rows.find(row => row.name === name));
+const comparisons = [];
+for (let i = 0; i < compared.length; i++) for (let j = i + 1; j < compared.length; j++) {
+  const smaller = compared[i], reference = compared[j];
+  comparisons.push({ entry: smaller.name, reference: reference.name, savings: Object.fromEntries(['minifiedBytes', 'gzipBytes', 'brotliBytes'].map(metric => [metric, { bytes: reference[metric] - smaller[metric], percent: (1 - smaller[metric] / reference[metric]) * 100 }])) });
+}
+const report = { environment: await environment(), methodology: 'esbuild browser/ES2022 ESM bundles, minify+tree-shake, gzip level 9, Brotli default. Comparisons report (reference - entry) bytes and 100 * (reference - entry) / reference percent. Feature-alone rows exclude the core; compression sizes are not additive. Other libraries implement broader Markdown grammars.', rows, comparisons, lazyChunks: outputs.map(([file, info]) => ({ file, bytes: info.bytes, inputs: Object.keys(info.inputs) })) };
 await mkdir('benchmarks/results', { recursive: true });
 await writeFile('benchmarks/results/size.json', JSON.stringify(report, null, 2) + '\n');
 console.table(rows);
