@@ -18,11 +18,13 @@ MiniText is a standalone repository containing one distributable engine package.
 
 ## State and resource ownership
 
-Each call owns its source normalization, parser cells, AST validation sets and output chunks. No process-global cache retains application documents. `createMiniText` snapshots configuration and extension objects; it does not initialize a parser, create a DOM or populate a registry. Plugin closures remain application-owned.
+Each call owns its source normalization, parser cells, AST validation state and HTML string. No process-global cache retains application documents. `createMiniText` snapshots configuration and extension objects; it does not initialize a parser, create a DOM or populate a registry. Plugin closures remain application-owned.
 
 Nodes have no parent pointers. Headless edits copy the modified path and share all other nodes. History intentionally retains versions up to its caller-selected capacity and provides `clear()`. Browser views retain only the latest HTML and owned DOM references. A caller may retain returned artifacts independently.
 
-Parsing and schema validation are separate passes. This adds work, measured in the benchmark, and makes the imported-AST boundary explicit. Transforms validate after each extension. No unsafe fast path bypasses validation. Input bytes, intermediate parser nodes and failed lookahead are checked before unbounded allocation/iteration; table cells account for padded expansion as they are created.
+Parsing and final-tree budget checks are separate passes. Trees built exclusively by the internal parser have known shapes, so their final pass checks text bytes, node count, depth and work without repeating plain-object, field-name and content-model checks. Any configured extension, each transform result, and every caller-supplied AST uses full structural validation, including cycles and extension data. No validation exemption persists on returned trees: passing a parsed document back to `render` always validates it fully.
+
+Ordinary inline text uses native scans and slices instead of one JavaScript iteration and linked cell per character. Inline hooks can recognize arbitrary characters, so batching is disabled whenever an inline hook is active. Every skipped code unit still consumes parser work. ASCII byte counting, unchanged safe ASCII URLs, short-value HTML escaping, indentation without tabs and block-prefix dispatch have specialized paths. The HTML backend accumulates a string and distinguishes fixed ASCII markup from dynamic UTF-8 text. Input bytes, intermediate parser nodes and failed lookahead remain bounded; table cells account for padded expansion as they are created.
 
 ## Modularity
 

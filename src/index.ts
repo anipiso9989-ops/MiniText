@@ -1,7 +1,7 @@
 import type { Diagnostic, Document, Extension, HtmlArtifact, Options, Result } from './model/types.ts';
 import { attempt, Budget } from './limits.ts';
 import { parseDocument } from './parse/block.ts';
-import { inspectDocument } from './model/validate.ts';
+import { inspectDocument, inspectParsedDocument } from './model/validate.ts';
 import { emitHTML } from './backends/html.ts';
 
 export type * from './model/types.ts';
@@ -11,6 +11,7 @@ export { validateDocument } from './model/validate.ts';
 
 function extensionsFor(options: Options): readonly Extension[] {
   const extensions = options.extensions ?? [];
+  if (!extensions.length) return extensions;
   const names = new Set<string>();
   for (const extension of extensions) {
     if (!extension.name || names.has(extension.name)) throw new TypeError(`Invalid or duplicate extension: ${extension.name}`);
@@ -21,7 +22,8 @@ function extensionsFor(options: Options): readonly Extension[] {
 function parsed(source: string, options: Options, extensions: readonly Extension[]): Document {
   if (typeof source !== 'string') throw new TypeError('Markdown source must be a string');
   let document = parseDocument(source, new Budget(options), extensions);
-  inspectDocument(document, new Budget(options));
+  if (extensions.length) inspectDocument(document, new Budget(options));
+  else inspectParsedDocument(document, new Budget(options));
   for (const extension of extensions) {
     if (extension.transform) { document = extension.transform(document); inspectDocument(document, new Budget(options)); }
   }

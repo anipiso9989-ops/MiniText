@@ -1,12 +1,12 @@
 {
   "environment": {
-    "date": "2026-10-30T22:01:55.542Z",
+    "date": "2026-11-03T23:46:50.159Z",
     "node": "v24.22.1",
     "v8": "13.6.233.17-node.58",
     "os": "linux 6.18.57 x64",
     "cpu": "AMD EPYC 9V74 80-Core Processor",
     "logicalCPUs": 9,
-    "sourceSHA256": "4c08c695536ee7dbbbf89539406f27ad0c4f78e8219ec7c1b6621e018ebf0256",
+    "sourceSHA256": "ef9ada04d6f8295f9ac9da4d00d90c543fb2d7eb0d7b74cfbdb9b8062e75fd7e",
     "versions": {
       "@types/node": "24.10.1",
       "esbuild": "0.28.2",
@@ -18,34 +18,34 @@
       "typescript": "5.9.3"
     }
   },
-  "methodology": "esbuild browser/ES2022 ESM bundles, minify+tree-shake, gzip level 9, Brotli default. Feature-alone rows exclude the core; compression sizes are not additive. Other libraries implement broader Markdown grammars.",
+  "methodology": "esbuild browser/ES2022 ESM bundles, minify+tree-shake, gzip level 9, Brotli default. Comparisons report (reference - entry) bytes and 100 * (reference - entry) / reference percent. Feature-alone rows exclude the core; compression sizes are not additive. Other libraries implement broader Markdown grammars.",
   "rows": [
     {
       "name": "MiniText render",
-      "minifiedBytes": 19459,
-      "gzipBytes": 7565,
-      "brotliBytes": 6898,
+      "minifiedBytes": 21283,
+      "gzipBytes": 8148,
+      "brotliBytes": 7396,
       "modules": 8
     },
     {
       "name": "MiniText parse",
-      "minifiedBytes": 14280,
-      "gzipBytes": 5873,
-      "brotliBytes": 5348,
+      "minifiedBytes": 15755,
+      "gzipBytes": 6347,
+      "brotliBytes": 5746,
       "modules": 8
     },
     {
       "name": "MiniText root (all exports)",
-      "minifiedBytes": 19861,
-      "gzipBytes": 7717,
-      "brotliBytes": 7029,
+      "minifiedBytes": 21685,
+      "gzipBytes": 8292,
+      "brotliBytes": 7557,
       "modules": 8
     },
     {
       "name": "MiniText browser",
-      "minifiedBytes": 20429,
-      "gzipBytes": 7980,
-      "brotliBytes": 7265,
+      "minifiedBytes": 22253,
+      "gzipBytes": 8563,
+      "brotliBytes": 7776,
       "modules": 9
     },
     {
@@ -66,21 +66,21 @@
       "name": "MiniText task lists (feature alone)",
       "minifiedBytes": 850,
       "gzipBytes": 553,
-      "brotliBytes": 461,
+      "brotliBytes": 462,
       "modules": 3
     },
     {
       "name": "MiniText rich text (feature alone)",
-      "minifiedBytes": 7756,
-      "gzipBytes": 3075,
-      "brotliBytes": 2766,
+      "minifiedBytes": 7823,
+      "gzipBytes": 3101,
+      "brotliBytes": 2779,
       "modules": 6
     },
     {
       "name": "MiniText embeds (feature alone)",
-      "minifiedBytes": 5917,
-      "gzipBytes": 2462,
-      "brotliBytes": 2205,
+      "minifiedBytes": 5984,
+      "gzipBytes": 2490,
+      "brotliBytes": 2242,
       "modules": 4
     },
     {
@@ -105,10 +105,66 @@
       "modules": 55
     }
   ],
+  "comparisons": [
+    {
+      "entry": "MiniText render",
+      "reference": "marked",
+      "savings": {
+        "minifiedBytes": {
+          "bytes": 26462,
+          "percent": 55.423604565923135
+        },
+        "gzipBytes": {
+          "bytes": 6157,
+          "percent": 43.04089479203076
+        },
+        "brotliBytes": {
+          "bytes": 5687,
+          "percent": 43.46862340441795
+        }
+      }
+    },
+    {
+      "entry": "MiniText render",
+      "reference": "markdown-it",
+      "savings": {
+        "minifiedBytes": {
+          "bytes": 128420,
+          "percent": 85.78318403772803
+        },
+        "gzipBytes": {
+          "bytes": 45048,
+          "percent": 84.68305887660726
+        },
+        "brotliBytes": {
+          "bytes": 37100,
+          "percent": 83.37828119381517
+        }
+      }
+    },
+    {
+      "entry": "marked",
+      "reference": "markdown-it",
+      "savings": {
+        "minifiedBytes": {
+          "bytes": 101958,
+          "percent": 68.10685156610089
+        },
+        "gzipBytes": {
+          "bytes": 38891,
+          "percent": 73.10888036694489
+        },
+        "brotliBytes": {
+          "bytes": 31413,
+          "percent": 70.59735706580366
+        }
+      }
+    }
+  ],
   "lazyChunks": [
     {
       "file": "benchmarks/.tmp/lazy/stdin.js",
-      "bytes": 18137,
+      "bytes": 19893,
       "inputs": [
         "dist/security.js",
         "dist/parse/inline.js",
@@ -120,15 +176,15 @@
       ]
     },
     {
-      "file": "benchmarks/.tmp/lazy/tables-5YREETVM.js",
+      "file": "benchmarks/.tmp/lazy/tables-4N5MZNAB.js",
       "bytes": 2301,
       "inputs": [
         "dist/features/tables.js"
       ]
     },
     {
-      "file": "benchmarks/.tmp/lazy/chunk-3H4TIWUA.js",
-      "bytes": 1477,
+      "file": "benchmarks/.tmp/lazy/chunk-XFYO7DPV.js",
+      "bytes": 1544,
       "inputs": [
         "dist/limits.js"
       ]

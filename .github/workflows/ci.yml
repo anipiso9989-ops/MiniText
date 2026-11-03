@@ -20,6 +20,8 @@ jobs:
       - run: npm run check
       - run: npm run size
       - run: npm run conformance
+      - run: npm run bench:throughput
+        if: matrix.node == 24
       - uses: actions/upload-artifact@v4
         with:
           name: reports-node-${{ matrix.node }}

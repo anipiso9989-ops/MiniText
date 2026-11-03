@@ -4,18 +4,19 @@ import { unescape } from '../security.ts';
 import { parseInline } from './inline.ts';
 
 const blank = (s: string) => /^\s*$/.test(s);
-const fence = (s: string) => /^( {0,3})(`{3,}|~{3,})(.*)$/.exec(s);
-const heading = (s: string) => /^ {0,3}(#{1,6})(?:[ \t]+(.*?)|[ \t]*)$/.exec(s);
-const quote = (s: string) => /^ {0,3}>[ \t]?(.*)$/.exec(s);
-const thematic = (s: string) => /^ {0,3}(?:(?:\*[ \t]*){3,}|(?:-[ \t]*){3,}|(?:_[ \t]*){3,})$/.test(s);
-const marker = (s: string) => /^( {0,3})([-+*]|\d{1,9}[.)])(?:([ \t]+)(.*)|$)/.exec(s);
+const fence = (s: string) => (s[0] === '`' || s[0] === '~' || s[0] === ' ') ? /^( {0,3})(`{3,}|~{3,})(.*)$/.exec(s) : null;
+const heading = (s: string) => (s[0] === '#' || s[0] === ' ') ? /^ {0,3}(#{1,6})(?:[ \t]+(.*?)|[ \t]*)$/.exec(s) : null;
+const quote = (s: string) => (s[0] === '>' || s[0] === ' ') ? /^ {0,3}>[ \t]?(.*)$/.exec(s) : null;
+const thematic = (s: string) => (s[0] === '*' || s[0] === '-' || s[0] === '_' || s[0] === ' ') && /^ {0,3}(?:(?:\*[ \t]*){3,}|(?:-[ \t]*){3,}|(?:_[ \t]*){3,})$/.test(s);
+const marker = (s: string) => (s[0] === '-' || s[0] === '+' || s[0] === '*' || s[0] === ' ' || (s[0]! >= '0' && s[0]! <= '9')) ? /^( {0,3})([-+*]|\d{1,9}[.)])(?:([ \t]+)(.*)|$)/.exec(s) : null;
 
 export function parseDocument(source: string, budget: Budget, extensions: readonly Extension[]): Document {
   budget.input(source);
   const normalized = source.replace(/\r\n?/g, '\n').replace(/\0/g, '\ufffd');
   const lines = normalized.split('\n');
   // Expand indentation tabs only, preserving code and inline text tabs.
-  for (let i = 0; i < lines.length; i++) {
+  if (normalized.includes('\t')) for (let i = 0; i < lines.length; i++) {
+    if (!/^ *\t/.test(lines[i]!)) continue;
     lines[i] = lines[i]!.replace(/^[ \t]+/, indent => {
       let width = 0;
       for (const ch of indent) width += ch === '\t' ? 4 - width % 4 : 1;
@@ -57,8 +58,8 @@ export function parseBlocks(lines: readonly string[], budget: Budget, extensions
         budget.tick(lines[i]!.length + 1);
         const close = /^ {0,3}(`+|~+)[ \t]*$/.exec(lines[i]!);
         if (close && close[1]![0] === mark[0] && close[1]!.length >= mark.length) { i++; closed = true; break; }
-        const leading = /^ */.exec(lines[i]!)![0].length;
-        content.push(lines[i]!.slice(Math.min(indent, leading)));
+        const leading = indent ? /^ */.exec(lines[i]!)![0].length : 0;
+        content.push(indent ? lines[i]!.slice(Math.min(indent, leading)) : lines[i]!);
       }
       // split() contributes a terminal empty line when input ends with LF.
       const terminalLF = !closed && content.at(-1) === '';

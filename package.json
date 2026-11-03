@@ -24,6 +24,7 @@
     "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-include=src/**/*.ts --test tests/*.test.ts",
     "test:browser": "node scripts/browser-test.mjs",
     "bench": "node benchmarks/run.mjs",
+    "bench:throughput": "node benchmarks/throughput.mjs",
     "conformance": "node benchmarks/conformance.mjs",
     "size": "node benchmarks/size.mjs",
     "check": "npm run typecheck && npm test && npm run build && node scripts/check-package.mjs",
